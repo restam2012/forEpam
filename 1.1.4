@@ -1,0 +1,9 @@
+class Main {
+    public static void main(String[] args) {
+        double x = 125.569;
+        double firstPart = (int)x;
+        double secondPart = x * 1000 % 1000;
+        double result = secondPart + firstPart / 1000;
+        System.out.println(result);
+    }
+}
