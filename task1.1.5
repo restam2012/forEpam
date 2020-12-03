@@ -1,0 +1,22 @@
+class Main {
+    public static void main(String[] args) {
+        int t = 5690;
+        int h = t / 3600;
+        int m = (t - h * 3600) / 60;
+        int s = m % 60;
+        String result = "";
+        result += forAddZero(h,"ч ");
+        result += forAddZero(m, "мин ");
+        result += forAddZero(s, "с ");
+        System.out.println(result);
+    }
+
+    public static String forAddZero(int t, String add){
+        if (t >= 10){
+            return t + add;
+        }
+        else {
+            return "0" + t + add;
+        }
+    }
+}
