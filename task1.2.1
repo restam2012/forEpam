@@ -1,0 +1,23 @@
+import java.util.Scanner;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the two angle.");
+        int x = scanner.nextInt();
+        int y = scanner.nextInt();
+        boolean isTriangle = false;
+        if (x + y < 180) {
+            isTriangle = true;
+            System.out.print("The triangle is exist. ");
+        }
+        else {
+            System.out.println("The triangle is don't exist.");
+        }
+        if (isTriangle && (x == 90 || y == 90 || x + y == 90)){
+            System.out.println("And it is a rectangular.");
+        }
+        else System.out.println("And it isn't a rectangular.");
+
+    }
+}
