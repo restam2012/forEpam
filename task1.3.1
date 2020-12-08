@@ -1,0 +1,27 @@
+import java.util.IllegalFormatException;
+import java.util.Scanner;
+
+class Main {
+    public static void main(String[] args) {
+        boolean ok = false;
+        int val = 0;
+        Scanner scanner = new Scanner(System.in);
+        while (!ok) {
+            System.out.println("Enter positive integer:");
+            try {
+                val = scanner.nextInt();
+                if (val < 1) throw new Exception("val < 1");
+                ok = true;
+            } catch (Exception e) {
+                System.out.println("Error, you enter bad value.");
+            }
+        }
+        System.out.println(count(val));
+    }
+    private static int count(int val){
+        if(val == 1) return 1;
+        else {
+            return val + count(val - 1);
+        }
+    }
+}
