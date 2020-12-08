@@ -1,0 +1,12 @@
+import java.math.BigInteger;
+
+class Main {
+    public static void main(String[] args) {
+        int val = 200;
+        BigInteger result = BigInteger.ONE;
+        for(int i = 1; i <= val; i++){
+            result = result.multiply(BigInteger.valueOf(i * i));
+        }
+        System.out.println(result);
+    }
+}
