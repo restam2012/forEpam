@@ -1,0 +1,16 @@
+import java.math.BigInteger;
+
+class Main {
+    public static void main(String[] args) {
+        double e = 0.001;
+        int i = 1;
+        double sum = 0;
+        double a = 2;
+        while (a >= e){
+            sum += a;
+            i++;
+            a = 1 / Math.pow(2, i) + 1 / Math.pow(3, i);
+        }
+        System.out.println(sum);
+    }
+}
