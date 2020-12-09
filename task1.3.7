@@ -1,0 +1,24 @@
+import java.util.Scanner;
+import java.util.TreeSet;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter from val to val for found dividers");
+        int m = scanner.nextInt();
+        int n = scanner.nextInt();
+        TreeSet<Integer> dividers = new TreeSet<>();
+        int val = m;
+        while (val <= n) {
+            for (int i = 2; i <= Math.sqrt(val); i++) {
+                if (val % i == 0) {
+                    dividers.add(i);
+                    dividers.add(val / i);
+                }
+            }
+            System.out.println("for val " + val + " dividers is " + dividers);
+            dividers.clear();
+            val++;
+        }
+    }
+}
