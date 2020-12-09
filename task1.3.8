@@ -1,0 +1,24 @@
+import java.util.HashSet;
+import java.util.Scanner;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter two val");
+        int m = scanner.nextInt();
+        int n = scanner.nextInt();
+        HashSet<Integer> num1 = findSet(String.valueOf(m));
+        HashSet<Integer> num2 = findSet(String.valueOf(n));
+        for(Integer i : num1){
+            if(num2.contains(i)) System.out.print(i + " ");
+        }
+    }
+
+    private static HashSet findSet(String stringForNum){
+        HashSet<Integer> set = new HashSet<>();
+        for(int i = 0; i < stringForNum.length(); i++){
+            set.add(Integer.valueOf(stringForNum.substring(i, i + 1)));
+        }
+        return set;
+    }
+}
