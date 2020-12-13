@@ -1,9 +1,7 @@
-import java.util.ArrayList;
-
 class Main {
     public static void main(String[] args) {
-        int[] mass = {1, 2, 3, 4, 5, 6, 0, -10, 42, 454, 11, -52};
-        int sum = 0;
+        double[] mass = {1, 2, 3, 4, 5, 6, 0, -10, 42, 454, 11, -52};
+        double sum = 0;
         for (int i = 2; i < mass.length; i++) {
             if(!check(i)){
                 sum += mass[i];
