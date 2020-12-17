@@ -1,0 +1,44 @@
+import java.util.Arrays;
+
+class Main {
+    public static void main(String[] args) {
+        int[][] mass = {{1, 2, 3, 4, 5, 66}, {49, 0, -10, 42, 0}, {454, 11, -52, 0, 5}, {-52, 66, 13, -1, 5}, {1, -1, 2, -2, 6, 43}, {6}};
+        int longestLine = -1, longestLinePosition = -1;
+        //if matrix is not square need to find the longest column
+        for (int i = 0; i < mass.length; i++){
+            if(longestLine < mass[i].length){
+                longestLine = mass[i].length;
+                longestLinePosition = i;
+            }
+        }
+        for (int i = 0; i < mass[longestLinePosition].length; i++) {
+            for (int j = mass.length - 1; j >= 1; j--) {
+                int k = 0, first = -1, second = -1;
+                while (k < j){
+                    if(first < 0 && mass[k].length > i) {
+                        first = k;
+                    }
+                    if (first >= 0 && second < 0 && mass[k + 1].length > i){
+                        second = k + 1;
+                    }
+                    if(first >= 0 && second >= 0 && mass[first][i] > mass[second][i]){
+                        int buffer = mass[first][i];
+                        mass[first][i] = mass[second][i];
+                        mass[second][i] = buffer;
+                    }
+                    if(first >= 0 && second >= 0){
+                        first = second;
+                        second = -1;
+                    }
+                    k++;
+                }
+            }
+        }
+        for (int i = 0; i < mass.length; i++) {
+            for (int j = 0; j < mass[i].length; j++) {
+                System.out.print(mass[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
