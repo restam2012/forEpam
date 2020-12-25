@@ -1,0 +1,21 @@
+import java.util.Arrays;
+
+class Main {
+    public static void main(String[] args) {
+        int[] mass = {0, 1, 2, 3, 4, 5, 100};
+        for (int i = 0; i < mass.length - 1; i++) {
+            int min = mass[i];
+            int minIndex = i;
+            for (int j = i + 1; j < mass.length; j++) {
+                if(mass[j] > min) {
+                    min = mass[j];
+                    minIndex = j;
+                }
+            }
+            int buffer = mass[i];
+            mass[i] = mass[minIndex];
+            mass[minIndex] = buffer;
+        }
+        System.out.println(Arrays.toString(mass));
+    }
+}
