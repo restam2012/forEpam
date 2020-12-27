@@ -1,0 +1,28 @@
+import java.util.Arrays;
+
+class Main {
+    public static void main(String[] args) {
+        int[] mass = {0, 1, 10, 2, 3, 33, 4, 5, 100, -1};
+        int h = 1;
+        while (h < mass.length){
+            h = h * 3 + 1;
+        }
+        while (h >= 1){
+            sort(h, mass);
+            h /= 3;
+        }
+        System.out.println(Arrays.toString(mass));
+    }
+
+    private static void sort(int h, int[] mass){
+        for (int i = h; i < mass.length; i++) {
+            for (int j = i; j >= h; j -= h) {
+                if(mass[j] < mass[j - h]){
+                    int buffer = mass[j];
+                    mass[j] = mass[j - h];
+                    mass[j - h] = buffer;
+                }
+            }
+        }
+    }
+}
