@@ -1,0 +1,77 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+
+class Main {
+    public static void main(String[] args) {
+        int[] mass1 = {0, 1, 10, 2, 3, 33, 4, 5, 100, 1};
+        int[] mass2 = {14, 52, 36, 27, 58, 87, 2, 90, 88, 17};
+        int selectIndex = 0;
+        int nod = findDenominator(mass2);
+        int[] numerator = findNumerator(mass1, mass2, nod);
+        int h = 1;
+        while (h < numerator.length){
+            h = h * 3 + 1;
+        }
+        while (h >= 1){
+            sortByShel(h, numerator);
+            h /= 3;
+        }
+        for (int i = 0; i < numerator.length; i++) {
+            System.out.print(numerator[i] + "/" + nod + " ");
+        }
+    }
+
+    private static int findDenominator(int[] mass){
+        int nok = mass[0];
+        for (int i = 1; i < mass.length; i++) {
+            nok = findNOK(nok, mass[i]);
+        }
+        return nok;
+    }
+
+    private static ArrayList<Integer> findNOD(int val){
+        ArrayList<Integer> forNOD = new ArrayList<>();
+        for(int i = 2; i <= val; i++){
+            while (val % i == 0){
+                forNOD.add(i);
+                val /= i;
+            }
+        }
+        if(forNOD.size() == 0) forNOD.add(val);
+        return forNOD;
+    }
+
+    private static int findNOK(int val1, int val2){
+        ArrayList<Integer> nod1 = findNOD(val1);
+        ArrayList<Integer> nod2 = findNOD(val2);
+        int pow = 1;
+        for (Integer i:nod1) {
+            if(nod2.contains(i)){
+                pow *= i;
+                nod2.remove(i);
+            }
+        }
+        int nok = val1 * val2 / pow;
+        return nok;
+    }
+
+    private static int[] findNumerator(int mass1[], int mass2[], int nod){
+        int[] numerator = new int[mass1.length];
+        for (int i = 0; i < mass1.length; i++) {
+            numerator[i] = nod / mass2[i] * mass1[i];
+        }
+        return numerator;
+    }
+
+    private static void sortByShel(int h, int[] mass) {
+        for (int i = h; i < mass.length; i++) {
+            for (int j = i; j >= h; j -= h) {
+                if (mass[j] < mass[j - h]) {
+                    int buffer = mass[j];
+                    mass[j] = mass[j - h];
+                    mass[j - h] = buffer;
+                }
+            }
+        }
+    }
+}
