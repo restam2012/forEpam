@@ -1,0 +1,12 @@
+class Main {
+    public static void main(String[] args) {
+        int a = 5;
+        double area = 6 * findAriaOfTriangle(a);
+        System.out.println(area);
+    }
+
+    private static double findAriaOfTriangle(int a){
+        double s = Math.sqrt(3) / 4 * a * a;
+        return s;
+    }
+}
