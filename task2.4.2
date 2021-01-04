@@ -1,0 +1,38 @@
+import java.util.ArrayList;
+
+class Main {
+    public static void main(String[] args) {
+        int[] mass = {10, 50, 20, 100};
+        int nod = findNOD(mass);
+        System.out.println(nod);
+    }
+
+    private static int findNOD(int[] mass){
+        int nod = mass[0];
+        for (int i = 1; i < mass.length; i++) {
+            int val = mass[i];
+            ArrayList<Integer> nod1 = helperForFindNOD(nod);
+            ArrayList<Integer> nod2 = helperForFindNOD(val);
+            nod = 1;
+            for (Integer k:nod1) {
+                if(nod2.contains(k)){
+                    nod *= k;
+                    nod2.remove(k);
+                }
+            }
+        }
+        return nod;
+    }
+
+    private static ArrayList<Integer> helperForFindNOD(int val){
+        ArrayList<Integer> forNOD = new ArrayList<>();
+        for(int i = 2; i <= val; i++){
+            while (val % i == 0){
+                forNOD.add(i);
+                val /= i;
+            }
+        }
+        if(forNOD.size() == 0) forNOD.add(val);
+        return forNOD;
+    }
+}
