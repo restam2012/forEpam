@@ -1,0 +1,44 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter n");
+        int n = scanner.nextInt();
+        int sum = 0;
+        for (int i = numFromCount(n); i < numFromCount(n + 1); i++) {
+            if (checkNum(i)) {
+                sum += i;
+            }
+        }
+        int even = findEvenNum(sum);
+        System.out.printf("Sum of odd num = %d, count of even numeral in sum is %d", sum, even);
+    }
+
+    private static boolean checkNum(int val){
+        int count = findEvenNum(val);
+        if(count == 0) return true;
+        else return false;
+    }
+
+    private static int findEvenNum(int val) {
+        int count = 0;
+        while (val > 0) {
+            int num = val % 10;
+            val /= 10;
+            if (num % 2 == 0) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private static int numFromCount(int count){
+        int num = 1;
+        for (int i = 0; i < count - 1; i++) {
+            num *= 10;
+        }
+        return num;
+    }
+}
