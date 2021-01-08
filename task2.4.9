@@ -1,15 +1,30 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
 class Main {
     public static void main(String[] args) {
-        double x = 2.6;
-        double y = 3;
-        double z = 3.6;
-        double t = 1.6;
-        System.out.println(areaOfQuadrangle(x, y, z, t));
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter number for do mass");
+        int val = scanner.nextInt();
+        int[] mass = doMass(val);
+        System.out.println(Arrays.toString(mass));
     }
 
-    private static double areaOfQuadrangle(double a, double b, double c, double d){
-        double p = (a + b + c + d) / 2;
-        double area = Math.sqrt((p - a) * (p - b) * (p - c) * (p - d));
-        return area;
+    private static int[] doMass(int val){
+        int size = findSizeOfMass(val);
+        int[] mass = new int[size];
+        for (int i = 0; i < size; i++) {
+            mass[i] = val % 10;
+            val /= 10;
+        }
+        return mass;
+    }
+    private static int findSizeOfMass(int val){
+        int count = 1;
+        while (val >= 10){
+            val /= 10;
+            count++;
+        }
+        return count;
     }
 }
