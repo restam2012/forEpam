@@ -1,0 +1,35 @@
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Scanner;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter k");
+        int k = scanner.nextInt();
+        for (int i = 1; i < k; i++) {
+            if(findArmstrongNum(i)) System.out.print(i + " ");
+        }
+    }
+
+    private static int findCountNumeral(int val){
+        int count = 1;
+        while (val >= 10){
+            val /= 10;
+            count++;
+        }
+        return count;
+    }
+
+    private static boolean findArmstrongNum(int val){
+        int myVal = val;
+        int count = findCountNumeral(val);
+        int sum = 0;
+        for (int i = 0; i < count; i++) {
+            sum += Math.pow(val % 10, count);
+            val /= 10;
+        }
+        if(sum == myVal) return true;
+        else return false;
+    }
+}
