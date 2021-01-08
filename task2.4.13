@@ -1,0 +1,42 @@
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Scanner;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        LinkedHashSet<Integer> twins = new LinkedHashSet<>();
+        System.out.println("Enter N");
+        int n = scanner.nextInt();
+        ArrayList<Integer>[] forFindSimpleNumbers = new ArrayList[n + 1];
+        for (int i = n; i <= 2 * n; i++) {
+            forFindSimpleNumbers[i - n] = helperForFindNOD(i);
+        }
+        for (int i = 0; i < forFindSimpleNumbers.length - 2; i++) {
+            if(findTwins(forFindSimpleNumbers[i], forFindSimpleNumbers[i + 2])){
+                twins.add(i + n);
+                twins.add(i + 2 + n);
+            }
+        }
+        System.out.println(twins);
+    }
+
+    private static ArrayList<Integer> helperForFindNOD(int val){
+        ArrayList<Integer> forNOD = new ArrayList<>();
+        for(int i = 2; i <= val; i++){
+            while (val % i == 0){
+                forNOD.add(i);
+                val /= i;
+            }
+        }
+        if(forNOD.size() == 0) forNOD.add(val);
+        return forNOD;
+    }
+
+    private static boolean findTwins(ArrayList first, ArrayList second){
+        if(first.size() == 1 && second.size() == 1){
+            return true;
+        }
+        else return false;
+    }
+}
