@@ -1,0 +1,7 @@
+class Main {
+    public static void main(String[] args) {
+        String myString = "   My phone   \t number is +375   29 542 41 70\tmts";
+        myString = myString.trim().replaceAll(" *\t *| +", " ");
+        System.out.println(myString);
+    }
+}
