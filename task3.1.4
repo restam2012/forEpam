@@ -1,0 +1,7 @@
+class Main {
+    public static void main(String[] args) {
+        String myString = "My phone number is +375 29 542 41 70";
+        int count = (myString + " ").split("\\d+").length - 1; // Added " ", because if the end of string ends with digit, the split ignore the end of string
+        System.out.println(count);
+    }
+}
