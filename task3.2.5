@@ -1,0 +1,23 @@
+class Main {
+    public static void main(String[] args) {
+        int count = 0;
+        String myString = "A pirate walks off his ship.\n" +
+                " He has a wooden leg, a hook for a hand, and a patch over his right eye.\n" +
+                " Two children shyly sit down next to him and ask the pirate how he came to have a wooden leg.\n" +
+                " The pirate replies, \"Well, I was standing on the deck of me ship one day, and a wave washed me overboard.\n" +
+                " Then, a hungry shark attacked me and bit me leg off.\n" +
+                "\"  The little boy then asks, \"How did you lose your hand?\"\n" +
+                "  \"Many years ago, I was fighting the Navy, and one of them boys cut me hand off.\n" +
+                " My doc couldn't find a hand, so he gave me this hook.\n" +
+                "\"  Next, the little girl asks, \"How did you lose your eye?\"\n" +
+                "  \"Well, I was standing watch up in the crow's nest, and just as I looked up, a lousy seagull flew over and did his business right in me eye.\n" +
+                "\"  The children, now thoroughly confused, ask, \"How did that cause you to lose your eye?\"\n" +
+                " The pirate explains, \"Well, it was me first day with the hook....\"";
+        for (int i = 0; i < myString.length(); i++) {
+            if(myString.charAt(i) == 'a'){
+                count++;
+            }
+        }
+        System.out.println(count);
+    }
+}
