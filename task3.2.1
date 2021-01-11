@@ -1,0 +1,15 @@
+class Main {
+    public static void main(String[] args) {
+        String myString = "   My phone   \t number is +375    29 542 41 70\tmts";
+        int count  = 0;
+        int maxCount = 0;
+        for (int i = 0; i < myString.length(); i++) {
+            if(myString.charAt(i) == ' '){
+                count++;
+                maxCount = count > maxCount ? count : maxCount;
+            }
+            else count = 0;
+        }
+        System.out.println(maxCount);
+    }
+}
