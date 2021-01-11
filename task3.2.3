@@ -1,0 +1,12 @@
+class Main {
+    public static void main(String[] args) {
+        String myString = "Saippuakivikauppias".toLowerCase();
+        boolean pal = true;
+        for (int i = 0; i < myString.length() / 2 + 1; i++) {
+            if(myString.charAt(i) != myString.charAt(myString.length() - 1 - i)){
+                pal = false;
+            }
+        }
+        System.out.println(pal);
+    }
+}
