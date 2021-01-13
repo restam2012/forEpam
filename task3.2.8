@@ -1,0 +1,15 @@
+class Main {
+    public static void main(String[] args) {
+        String myString = "abc cdee deeef d";
+        String[] mass = myString.split(" ");
+        int maxLength = 0;
+        String maxLengthWorld = "";
+        for (String s:mass) {
+            if(s.length() > maxLength){
+                maxLength = s.length();
+                maxLengthWorld = s;
+            }
+        }
+        System.out.println(maxLengthWorld);
+    }
+}
