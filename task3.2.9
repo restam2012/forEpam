@@ -1,0 +1,12 @@
+class Main {
+    public static void main(String[] args) {
+        String myString = "abc cdee deeef A";
+        int capital = 0;
+        int small = 0;
+        for (int i = 0; i < myString.length(); i++) {
+            if(myString.charAt(i) >= 'a' && myString.charAt(i) <= 'z') small++;
+            else if (myString.charAt(i) >= 'A' && myString.charAt(i) <= 'Z') capital++;
+        }
+        System.out.printf("Small letters is %d, capital letters is %d", small, capital);
+    }
+}
