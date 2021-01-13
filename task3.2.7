@@ -1,0 +1,12 @@
+class Main {
+    public static void main(String[] args) {
+        String myString = "abc cde def";
+        String resultString = "";
+        for (int i = 0; i < myString.length(); i++) {
+            if(myString.charAt(i) != ' ' && !resultString.contains(String.valueOf(myString.charAt(i)))){
+                resultString += String.valueOf(myString.charAt(i));
+            }
+        }
+        System.out.println(resultString);
+    }
+}
