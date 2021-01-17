@@ -1,0 +1,156 @@
+import java.util.Scanner;
+
+class Main {
+    public static void main(String[] args) {
+       String myString = "The current severe economic downturn in America affects people on every level. Rising fuel costs have impacted everything from the price of groceries to the cost of getting to work everyday. Due to this economy issue, there are the changes in the way people spend their leisure time. There are media reports that tell about the trend away from vacations and toward \"staycations\", where people stay at home instead of travelling. At the same time, there’s a significant trend toward finding recreational activities. They are called crafts for kids, quilting, and gardening.\n" +
+               "Parents and grandparents are always on the lookout for kids’ craft projects that will engage children and keep those little hands busy. Thankfully there are many inexpensive books that are filled with ideas. For example, you can find books that outline crafts using play dough, how to make flower figures, and even Christmas crafts. In fact, you can even find books that provide ideas for making Christmas gifts that fit in a jar. From crafts for preschool-age children to pastimes tor older kids these idea books provide a wealth of options for engaging children’s imaginations.\n" +
+               "As for adults, two trends are emerging. Knitting and sewing were popular during the past decade. The latest pastime appreciated by American adults is quilting. Hobbyists are bringing it back tо lite and enjoying the detail and craft involved in making a quilt. There is a wealth of helpful new books on quilting projects, including how-to books, quilting patterns, and quilting designs.\n" +
+               "The other emerging trend for adults is gardening. People spend so much time at home. They find gardening a great way of relaxation and getting a sense of satisfaction.\n" +
+               "The recent interest in crafts in America is not only a matter of economics. It’s also a reflection of people’s new environmental sensibilities. The concepts of \"reduce, reuse, and recycle\" are the cornerstone of crafting. Pieces of fabric can be put together to make gorgeous quilting designs, and some types of waste can be composted and used as fertilizer in gardening. In this respect, Americans will say: \"Save money and save the planet. It’s a winning combination!\".";
+        System.out.println("Выберите операцию:");
+        System.out.println("1. Отсортировать абзацы по количеству предложений");
+        System.out.println("2. В каждом предложении отсортировать слова по длине");
+        System.out.println("3. Отсортировать лексемы в предложении по убыванию количества вхождений заданного символа, а в случае равенства – по алфавиту");
+        Scanner scanner = new Scanner(System.in);
+        int select = scanner.nextInt();
+        scanner.nextLine();
+        switch (select){
+            case 1:
+                System.out.println(countOfSentences(myString));
+                break;
+            case 2:
+                System.out.println(sortByWordInSentences(myString));
+                break;
+            case 3:
+                System.out.println("Введите символ:");
+                String lex = scanner.nextLine().trim();
+                System.out.println(sortByEnterLex(myString, lex));
+                break;
+            default:
+                System.out.println("Некорректный выбор");
+                break;
+        }
+    }
+
+    private static String countOfSentences(String myString){
+        String[] mass = myString.split("\n");
+        int[] massSize = new int[mass.length];
+        for (int i = 0; i < mass.length; i++) {
+            massSize[i] = (mass[i] + " ").split("\\.|!|\\?").length - 1;
+        }
+        String resultString = new String();
+        int[] indexOfMass = sort(massSize);
+        for (int i:indexOfMass) {
+            resultString += mass[i] + "\n";
+        }
+        return resultString;
+    }
+
+    private static String sortByWordInSentences(String myString){
+        String result = new String();
+        String[] paragraph = myString.split("\n"); //is don't do it a "\n" stay in not correct position
+        for (String selectedParagraph:paragraph) {
+            String[] sentences = selectedParagraph.split("\\.|!|\\?");
+            for (String s : sentences) {
+                String[] word = s.split("\\s+");
+                int[] lengthOfWord = new int[word.length];
+
+                for (int i = 0; i < word.length; i++) {
+                    lengthOfWord[i] = word[i].length();
+                }
+
+                int[] indexOfMass = sort(lengthOfWord);
+                for (int i = 0; i < indexOfMass.length; i++) {
+                    result += word[indexOfMass[i]];
+                    if (i < lengthOfWord.length - 1) {
+                        result += " ";
+                    } else result += ". ";
+                }
+            }
+            result += "\n";
+        }
+        return result;
+    }
+
+    private static String sortByEnterLex(String myString, String lex){
+        String result = new String();
+        String[] word = myString.split("\\s");
+        int[] countOfLexInWord = new int[word.length];
+        for (int i = 0; i < word.length; i++) {
+            countOfLexInWord[i] = (word[i] + " ").split(lex).length;
+        }
+        word = sort(word, countOfLexInWord);
+        for (String s:word) {
+            result += s + " ";
+        }
+        return result;
+    }
+
+    private static int[] sort(int[] mass){
+        int[] massOfIndex = new int[mass.length];
+        for (int i = 0; i < massOfIndex.length; i++) {
+            massOfIndex[i] = i;
+        }
+        for (int i = 0; i < mass.length - 1; i++) {
+            if(mass[i] > mass[i + 1]){
+                int buffer = mass[i];
+                mass[i] = mass[i + 1];
+                mass[i + 1] = buffer;
+
+                int indexBuffer = massOfIndex[i];
+                massOfIndex[i] = massOfIndex[i + 1];
+                massOfIndex[i + 1] = indexBuffer;
+                if(i > 0) i -= 2;
+            }
+        }
+        return massOfIndex;
+    }
+
+    private static String[] sort(String[] word, int[] countOfLexInWord){
+        for (int i = 0; i < countOfLexInWord.length - 1; i++) {
+            if(countOfLexInWord[i] > countOfLexInWord[i + 1]){
+                countOfLexInWord = changeCountOfLex(countOfLexInWord, i);
+                word = changeString(word, i);
+                if(i > 0) i -= 2;
+            }
+            else if(countOfLexInWord[i] == countOfLexInWord[i + 1]){
+                boolean stop = false;
+                int j = 0;
+                while (!stop){
+                    if(word[i].toLowerCase().charAt(j) > word[i + 1].toLowerCase().charAt(j)){
+                        stop = true;
+                        word = changeString(word, i);
+                        if(i > 0) i -= 2;
+                    }
+                    else if(word[i].toLowerCase().charAt(j) < word[i + 1].toLowerCase().charAt(j)){
+                        stop = true;
+                    }
+                    else {
+                        if(word[i].length() == j + 1)  stop = true;
+                        else if(word[i + 1].length() == j + 1){
+                            stop = true;
+                            word = changeString(word, i);
+                            if(i > 0) i -= 2;
+                        }
+                    }
+                    j++;
+                }
+            }
+        }
+        return word;
+    }
+
+    private static String[] changeString(String[] word, int startPos){
+        String stringBuffer = word[startPos];
+        word[startPos] = word[startPos + 1];
+        word[startPos + 1] = stringBuffer;
+        return word;
+    }
+    private static int[] changeCountOfLex(int[] countOfLexInWord, int startPos){
+        int buffer = countOfLexInWord[startPos];
+        countOfLexInWord[startPos] = countOfLexInWord[startPos + 1];
+        countOfLexInWord[startPos + 1] = buffer;
+        return countOfLexInWord;
+    }
+
+}
