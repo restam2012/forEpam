@@ -1,0 +1,52 @@
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+class Main {
+    public static void main(String[] args) {
+        String myString = "" +
+                "<notes>\n" +
+                " <note id = \"1\">\n" +
+                " <to>Вася</to>\n" +
+                " <from>Света</from>\n" +
+                " <heading>Напоминание</heading>\n" +
+                " <body>Позвони мне завтра!</body>\n" +
+                " </note>\n" +
+                " <note id = \"2\">\n" +
+                " <to>Петя</to>\n" +
+                " <from>Маша</from>\n" +
+                " <heading>Важное напоминание</heading>\n" +
+                " <body/>\n" +
+                " </note>\n" +
+                "</notes>";
+        parsingText(myString);
+    }
+
+    private static void parsingText(String myString){
+        Pattern pattern = Pattern.compile("<\\w+");
+        Matcher matcher = pattern.matcher(myString);
+        if(matcher.find()) {
+            String tag = myString.substring(matcher.start() + 1, matcher.end());
+
+            pattern = Pattern.compile("<" + tag + ".*?>");
+            matcher = pattern.matcher(myString);
+            matcher.find();
+            int startOfInsides = matcher.end();
+            System.out.print(matcher.group() + " "); //open tag
+            if (!matcher.group().contains("/>")) {
+                pattern = Pattern.compile("(</" + tag + ">)");
+                matcher = pattern.matcher(myString);
+                matcher.find();
+                System.out.println(matcher.group()); //close tag
+                String subString = myString.substring(startOfInsides, matcher.start()).trim();
+                System.out.println(subString); //inside tag
+                System.out.println();
+                parsingText(subString);
+                subString = myString.substring(matcher.end());
+                if (subString.contains("<")) {
+                    parsingText(subString);
+                }
+            }
+        }
+    }
+
+}
