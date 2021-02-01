@@ -1,0 +1,19 @@
+public class Test1 {
+    int val1 = 0;
+    int val2 = 1;
+    public void setVal1(int val1) {
+        this.val1 = val1;
+    }
+    public void setVal2(int val2){
+        this.val2 = val2;
+    }
+    public void outVal(){
+        System.out.printf("val1 = %d, val2 = %d%n", val1, val2);
+    }
+    public int sum(){
+        return val1 + val2;
+    }
+    public int max(){
+        return val1 > val2 ? val1 : val2;
+    }
+}
