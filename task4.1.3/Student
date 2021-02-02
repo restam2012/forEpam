@@ -1,0 +1,21 @@
+public class Student{
+    String name;
+    int group;
+    int[] progress;
+    Student(String name, int group, int ... progress){
+        this.name = name;
+        this.group = group;
+        this.progress = progress;
+    }
+
+    public boolean selectCleverStudents(){
+        for (int i:progress) {
+            if(i < 9) return false;
+        }
+        return true;
+    }
+
+    public void outInformationAboutStudent(){
+        System.out.println(name + " " + group);
+    }
+}
