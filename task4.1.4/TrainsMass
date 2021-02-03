@@ -1,0 +1,105 @@
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+public class TrainsMass {
+    Train[] train = new Train[5];
+    TrainsMass() {
+        Calendar calendar1 = new GregorianCalendar();
+        calendar1.set(0, 0, 0, 10, 20);
+        train[0] = new Train("Grodno", 1, calendar1);
+
+        Calendar calendar2 = new GregorianCalendar();
+        calendar2.set(0, 0, 0, 15, 30);
+        train[1] = new Train("Mohilev", 6, calendar2);
+
+        Calendar calendar3 = new GregorianCalendar();
+        calendar3.set(0, 0, 0, 18, 8);
+        train[2] = new Train("Ostrovec", 13, calendar3);
+
+        Calendar calendar4 = new GregorianCalendar();
+        calendar4.set(0, 0, 0, 8, 30);
+        train[3] = new Train("Mohilev", 7, calendar4);
+
+        Calendar calendar5 = new GregorianCalendar();
+        calendar5.set(0, 0, 0, 10, 30);
+        train[4] = new Train("Vitebsk", 2, calendar5);
+
+       /* Calendar calendar6 = new GregorianCalendar();
+        calendar6.set(0, 0, 0, 10, 20);
+        train[5] = new Train("Grodno", 1, calendar6);
+
+        Calendar calendar7 = new GregorianCalendar();
+        calendar7.set(0, 0, 0, 18, 30);
+        train[6] = new Train("Mohilev", 6, calendar7);
+
+        Calendar calendar8 = new GregorianCalendar();
+        calendar8.set(0, 0, 0, 18, 8);
+        train[7] = new Train("Astrovec", 13, calendar8);
+
+        Calendar calendar9 = new GregorianCalendar();
+        calendar9.set(0, 0, 0, 1, 30);
+        train[8] = new Train("Mohilev", 7, calendar9);
+
+        Calendar calendar10 = new GregorianCalendar();
+        calendar10.set(0, 0, 0, 10, 30);
+        train[9] = new Train("Vitebsk", 2, calendar10);*/
+    }
+
+    public void sortMassByNum(){
+        for(int left = 1; left < train.length; left++){
+            Train buffer = train[left];
+            int value = train[left].numOfTrain;
+            int i = left - 1;
+            for(; i >= 0; i--){
+                if(value < train[i].numOfTrain){
+                    train[i + 1] = train[i];
+                }
+                else {
+                    break;
+                }
+            }
+            train[i + 1] = buffer;
+        }
+    }
+
+    public void sortMassByCity(){
+        for(int left = 1; left < train.length; left++){
+            Train buffer = train[left];
+            String value = train[left].place;
+            int i = left - 1;
+            outOfLoop:
+            for(; i >= 0; i--){
+                int j = 0;
+                boolean ifSame = true;
+                while (j < value.length() && j < train[i].place.length()) {
+                    if (value.charAt(j) < train[i].place.charAt(j)) {
+                        train[i + 1] = train[i];
+                        ifSame = false;
+                        break;
+                    } else if(value.charAt(j) > train[i].place.charAt(j)) {
+                        break outOfLoop;
+                    }
+                    j++;
+                }
+                if(ifSame){
+                    if(train[i].time.compareTo(buffer.time) <= 0) {
+                        break ;
+                    }
+                    else {
+                      train[i + 1] = train[i];
+                      train[i] = buffer;
+                    }
+                }
+            }
+            train[i + 1] = buffer;
+        }
+    }
+
+    public void outInformationAboutTrain(int i){
+        for (Train t:train) {
+            if(t.numOfTrain == i){
+                System.out.println(t.toString());
+            }
+        }
+    }
+}
