@@ -1,0 +1,27 @@
+public class Triangle {
+    double xa, ya, xb, yb, xc, yc, ab, bc, ca, xm, ym;
+    Triangle(double xa, double ya, double xb, double yb, double xc, double yc){
+        this.xa = xa;
+        this.ya = ya;
+        this.xb = xb;
+        this.yb = yb;
+        this.xc = xc;
+        this.yc = yc;
+        ab = Math.sqrt(Math.pow((xa - xb), 2) + Math.pow((ya - yb), 2));
+        bc = Math.sqrt(Math.pow((xb - xc), 2) + Math.pow((yb - yc), 2));
+        ca = Math.sqrt(Math.pow((xc - xa), 2) + Math.pow((yc - ya), 2));
+    }
+
+    public double perimeter(){
+        return ab + bc + ca;
+    }
+
+    public double square(){
+        return Math.sqrt(perimeter() * (perimeter() - ab) * (perimeter() - bc) * (perimeter() - ca));
+    }
+
+    public void findMedian(){
+        xm = (xa + xb + xc) / 2;
+        ym = (ya + yb + yc) / 2;
+    }
+}
