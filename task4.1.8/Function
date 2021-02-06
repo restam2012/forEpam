@@ -1,0 +1,35 @@
+import java.util.*;
+
+public class Function {
+    int id = 1;
+    List<Customer> customers = new ArrayList<>();
+    public void add(String secondName, String firstName, String patronymic, int numOfCard, int numOfBanAccount){
+        customers.add(new Customer(id++, secondName, firstName, patronymic, numOfCard, numOfBanAccount));
+        Collections.sort(customers, new Comparator<Customer>() {
+            @Override
+            public int compare(Customer c1, Customer c2) {
+                if(!c1.secondName.equals(c2.secondName)){
+                    return c1.secondName.compareTo(c2.secondName);
+                }
+                else if(!c1.firstName.equals(c2.firstName)){
+                    return c1.firstName.compareTo(c2.firstName);
+                }
+                else return c1.patronymic.compareTo(c2.patronymic);
+            }
+        });
+    }
+
+    public void selectedForCreditCard(int lowB, int highB){
+        for(Customer c : customers){
+            if(c.numOfCard >= lowB && c.numOfCard <= highB){
+                System.out.println(c.toString());
+            }
+        }
+    }
+
+    public void showAllCustomers(){
+        for (Customer c:customers) {
+            System.out.println(c.toString());
+        }
+    }
+}
