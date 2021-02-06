@@ -1,0 +1,105 @@
+import java.util.*;
+
+public class Main  {
+
+    public static void main( String args[] ) {
+        Commands commands = new Commands();
+        Scanner scanner = new Scanner(System.in);
+        boolean stop = false;
+        while (!stop){
+            System.out.println("Selected one of this option:");
+            System.out.println("1. Add new airline");
+            System.out.println("2. Show airline by place");
+            System.out.println("3. Show airline by day");
+            System.out.println("4. Show airline by day, if time of start more, that enter");
+            System.out.println("5. Show all airline");
+            System.out.println("0. Exit");
+            int ch = Integer.parseInt(scanner.nextLine());
+            switch (ch){
+                case 1:
+                    System.out.println("Enter place to trip");
+                    String place = scanner.nextLine();
+
+                    System.out.println("Enter num of flight");
+                    String num = scanner.nextLine();
+
+                    System.out.println("Select producer of plain");
+                    for(PlainProducer pp:PlainProducer.values()) {
+                        System.out.println(pp.toString());
+                    }
+                    PlainProducer toPlain = PlainProducer.valueOf(scanner.nextLine());
+                    System.out.println("Enter model of plain");
+                    Plain plain = new Plain(toPlain, scanner.nextLine());
+
+                    System.out.println("Enter hour of flying");
+                    int hour = Integer.parseInt(scanner.nextLine());
+                    System.out.println("Enter minute of flying");
+                    int minute = Integer.parseInt(scanner.nextLine());
+                    Calendar time = new GregorianCalendar();
+                    time.set(Calendar.HOUR_OF_DAY, hour);
+                    time.set(Calendar.MINUTE, minute);
+
+                    System.out.println("Enter firths day of flying");
+                    System.out.println("Select from list:");
+                    for(Day d:Day.values()){
+                        System.out.println(d.toString());
+                    }
+                    boolean endOfDays = false;
+                    List<Day> days = new ArrayList<>();
+                    days.add(Day.valueOf(scanner.nextLine()));
+                    while (!endOfDays){
+                        System.out.println("This airline has day yet? If yes, enter day. If not, enter 0");
+                        String str = scanner.nextLine();
+                        if(str.equals("0")){
+                            endOfDays = true;
+                        }
+                        else {
+                            days.add(Day.valueOf(str));
+                        }
+                    }
+
+                    commands.add(place, num, plain, time, days.toArray(Day[]::new));
+                    break;
+                case 2:
+                    System.out.println("Enter place");
+                    String selectPlace = scanner.nextLine();
+                    commands.showByCity(selectPlace);
+                    break;
+                case 3:
+                    System.out.println("Select day from list:");
+                    for(Day d:Day.values()){
+                        System.out.println(d.toString());
+                    }
+                    Day day = Day.valueOf(scanner.nextLine());
+                    commands.showByDay(day);
+                    break;
+                case 4:
+                    System.out.println("Select day from list:");
+                    for(Day d:Day.values()){
+                        System.out.println(d.toString());
+                    }
+                    day = Day.valueOf(scanner.nextLine());
+                    System.out.println("Enter hour of flying");
+                    hour = Integer.parseInt(scanner.nextLine());
+                    System.out.println("Enter minute of flying");
+                    minute = Integer.parseInt(scanner.nextLine());
+                    Calendar calendar = new GregorianCalendar();
+                    calendar.set(Calendar.HOUR_OF_DAY, hour);
+                    calendar.set(Calendar.MINUTE, minute);
+                    commands.showByDayAndTime(day, calendar);
+                    break;
+                case 5:
+                    commands.showAllAirline();
+                    break;
+                case 0:
+                    System.out.println("Bye");
+                    stop = true;
+                    break;
+                default:
+                    System.out.println("Enter not correct val. Try again");
+            }
+
+        }
+    }
+}
+
