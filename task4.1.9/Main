@@ -1,0 +1,89 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Main  {
+
+    public static void main( String args[] ) {
+        Commands commands = new Commands();
+        Scanner scanner = new Scanner(System.in);
+        boolean stop = false;
+        while (!stop){
+            System.out.println("Selected one of this option:");
+            System.out.println("1. Add new book");
+            System.out.println("2. Show books by author");
+            System.out.println("3. Show books by publishers");
+            System.out.println("4. Show books, publishers after selected year");
+            System.out.println("5. Show all books");
+            System.out.println("0. Exit");
+            int ch = Integer.parseInt(scanner.nextLine());
+            switch (ch){
+                case 1:
+                    System.out.println("Enter name of book");
+                    String name = scanner.nextLine();
+
+                    System.out.println("Enter firths author of book");
+                    boolean endOfAuthor = false;
+                    List<String> author = new ArrayList<>();
+                    author.add(scanner.nextLine());
+                    while (!endOfAuthor){
+                        System.out.println("This book has author yet? If yes, enter name. If false, enter 0");
+                        String str = scanner.nextLine();
+                        if(str.equals("0")){
+                            endOfAuthor = true;
+                        }
+                        else {
+                            author.add(str);
+                        }
+                    }
+
+                    System.out.println("Enter publishers:");
+                    String publishes = scanner.nextLine();
+
+                    System.out.println("Enter year of publishing");
+                    int year = Integer.parseInt(scanner.nextLine());
+
+                    System.out.println("Enter count of lists");
+                    int count = Integer.parseInt(scanner.nextLine());
+
+                    System.out.println("Enter price");
+                    double prise = Double.parseDouble(scanner.nextLine());
+
+                    System.out.println("Selected type of binding:");
+                    for (Binding b:Binding.values()) {
+                        System.out.println(b.toString());
+                    }
+                    Binding type = Binding.valueOf(scanner.nextLine());
+
+                    commands.addBook(name, author.toArray(String[]::new), publishes, year, count, prise, type);
+                    break;
+                case 2:
+                    System.out.println("Enter author");
+                    String selectAuthor = scanner.nextLine();
+                    commands.selectedForAuthor(selectAuthor);
+                    break;
+                case 3:
+                    System.out.println("Enter publishers");
+                    String publisher = scanner.nextLine();
+                    commands.selectedForPublishes(publisher);
+                    break;
+                case 4:
+                    System.out.println("Enter year");
+                    year = Integer.parseInt(scanner.nextLine());
+                    commands.selectedForYear(year);
+                    break;
+                case 5:
+                    commands.showAllBooks();
+                    break;
+                case 0:
+                    System.out.println("Bye");
+                    stop = true;
+                    break;
+                default:
+                    System.out.println("Enter not correct val. Try again");
+            }
+
+        }
+    }
+}
+
