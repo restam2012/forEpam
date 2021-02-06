@@ -1,0 +1,72 @@
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
+
+public class Airline {
+    String city;
+    String num;
+    Plain plain;
+    Calendar time;
+    Day[] days;
+
+    public Airline(String city, String num, Plain plain, Calendar time, Day[] days) {
+        this.city = city;
+        this.num = num;
+        this.plain = plain;
+        this.time = time;
+        this.days = days;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getNum() {
+        return num;
+    }
+
+    public void setNum(String num) {
+        this.num = num;
+    }
+
+    public Plain getPlain() {
+        return plain;
+    }
+
+    public void setPlain(Plain plain) {
+        this.plain = plain;
+    }
+
+    public Calendar getTime() {
+        return time;
+    }
+
+    public void setTime(Calendar time) {
+        this.time = time;
+    }
+
+    public Day[] getDays() {
+        return days;
+    }
+
+    public void setDays(Day[] days) {
+        this.days = days;
+    }
+
+    @Override
+    public String toString() {
+        DateFormat df = new SimpleDateFormat("HH:mm:ss");
+        return "Airline{" +
+                "city='" + city + '\'' +
+                ", num='" + num + '\'' +
+                ", plain=" + plain +
+                ", time=" + df.format(time.getTime()) +
+                ", days=" + Arrays.toString(days) +
+                '}';
+    }
+}
