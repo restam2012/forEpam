@@ -1,0 +1,77 @@
+public class Customer {
+    int id;
+    String secondName;
+    String firstName;
+    String patronymic;
+    int numOfCard;
+    int numOfBankAccount;
+
+    public Customer(int id, String secondName, String firstName, String patronymic, int numOfCard, int numOfBankAccount) {
+        this.id = id;
+        this.secondName = secondName;
+        this.firstName = firstName;
+        this.patronymic = patronymic;
+        this.numOfCard = numOfCard;
+        this.numOfBankAccount = numOfBankAccount;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getPatronymic() {
+        return patronymic;
+    }
+
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
+    }
+
+    public int getNumOfCard() {
+        return numOfCard;
+    }
+
+    public void setNumOfCard(int numOfCard) {
+        this.numOfCard = numOfCard;
+    }
+
+    public int getNumOfBankAccount() {
+        return numOfBankAccount;
+    }
+
+    public void setNumOfBankAccount(int numOfBankAccount) {
+        this.numOfBankAccount = numOfBankAccount;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id='" + id + '\'' +
+                ", secondName='" + secondName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", patronymic='" + patronymic + '\'' +
+                ", numOfCard=" + numOfCard +
+                ", numOfBankAccount=" + numOfBankAccount +
+                '}';
+    }
+}
