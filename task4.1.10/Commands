@@ -1,0 +1,49 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+
+public class Commands {
+    List<Airline> airlines = new ArrayList<>();
+    public void add(String city, String num, Plain plain, Calendar time, Day[] day){
+        airlines.add(new Airline(city, num, plain, time, day));
+    }
+    public void showByCity(String city){
+        for(Airline a:airlines){
+            if(a.city.equals(city)){
+                System.out.println(a.toString());
+            }
+        }
+    }
+
+    public void showByDay(Day day){
+        for(Airline a:airlines){
+            if(checkDays(a.days, day)){
+                System.out.println(a.toString());
+            }
+        }
+    }
+
+    public void showByDayAndTime(Day day, Calendar time){
+        for(Airline a:airlines){
+            if(checkDays(a.days, day) && a.time.compareTo(time) > 0){
+                System.out.println(a.toString());
+            }
+        }
+    }
+
+    public void showAllAirline(){
+        for(Airline a:airlines){
+            System.out.println(a.toString());
+        }
+    }
+
+    private boolean checkDays(Day[] days, Day day){
+        for(Day d:days){
+            if(d.equals(day)){
+                return true;
+            }
+        }
+        return false;
+    }
+}
