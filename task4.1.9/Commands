@@ -1,0 +1,49 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class Commands {
+    List<Book> books = new ArrayList<>();
+    int id = 1;
+    public void addBook(String name, String[] author, String publishes, int year, int countOfLists, double price, Binding type){
+        books.add(new Book(id++, name, author, publishes, year, countOfLists, price, type));
+    }
+
+    public void selectedForAuthor(String author){
+        for (Book b:books) {
+            if(ifHasAuthor(b.author, author)){
+                System.out.println(b.toString());
+            }
+        }
+    }
+
+    public void selectedForPublishes(String publishes){
+        for (Book b:books) {
+            if(b.publishers.equals(publishes)){
+                System.out.println(b.toString());
+            }
+        }
+    }
+
+    public void selectedForYear(int year){
+        for (Book b:books) {
+            if(b.year >= year){
+                System.out.println(b.toString());
+            }
+        }
+    }
+
+    public void showAllBooks(){
+        for(Book b:books){
+            System.out.println(b.toString());
+        }
+    }
+
+    private boolean ifHasAuthor(String[] massOfAuthors, String author){
+        for(String a : massOfAuthors){
+            if(a.equals(author)){
+                return true;
+            }
+        }
+        return false;
+    }
+}
