@@ -1,0 +1,101 @@
+import java.util.Arrays;
+
+public class Book {
+    int id;
+    String name;
+    String[] author;
+    String publishers;
+    int year;
+    int countOfList;
+    double price;
+    Binding type;
+
+    public Book(int id, String name, String[] author, String publishers, int year, int countOfList, double price, Binding type) {
+        this.id = id;
+        this.name = name;
+        this.author = author;
+        this.publishers = publishers;
+        this.year = year;
+        this.countOfList = countOfList;
+        this.price = price;
+        this.type = type;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", author=" + Arrays.toString(author) +
+                ", publishers='" + publishers + '\'' +
+                ", year=" + year +
+                ", countOfList=" + countOfList +
+                ", price=" + price +
+                ", type=" + type +
+                '}';
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String[] getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String[] author) {
+        this.author = author;
+    }
+
+    public String getPublishers() {
+        return publishers;
+    }
+
+    public void setPublishers(String publishers) {
+        this.publishers = publishers;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getCountOfList() {
+        return countOfList;
+    }
+
+    public void setCountOfList(int countOfList) {
+        this.countOfList = countOfList;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public Binding getType() {
+        return type;
+    }
+
+    public void setType(Binding type) {
+        this.type = type;
+    }
+}
