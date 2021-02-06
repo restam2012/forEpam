@@ -1,0 +1,50 @@
+import java.util.Scanner;
+
+public class Main  {
+
+    public static void main( String args[] ) {
+        Function function = new Function();
+        Scanner scanner = new Scanner(System.in);
+        boolean stop = false;
+        while (!stop) {
+            System.out.println("What want you do? Make your choice.");
+            System.out.println("1. Enter new customer.");
+            System.out.println("2. Show all customers");
+            System.out.println("3. Show customers with card in border");
+            System.out.println("0. Exit");
+            int ch = Integer.parseInt(scanner.nextLine());
+            switch (ch){
+                case 1:
+                    System.out.println("Enter second name");
+                    String secondName = scanner.nextLine();
+                    System.out.println("Enter first name");
+                    String firstName = scanner.nextLine();
+                    System.out.println("Enter patronymic");
+                    String patronymic = scanner.nextLine();
+                    System.out.println("Enter num of card");
+                    int numOfCard = Integer.parseInt(scanner.nextLine());
+                    System.out.println("Enter num of bank account");
+                    int numOfBankAccount = Integer.parseInt(scanner.nextLine());
+                    function.add(secondName, firstName, patronymic, numOfCard, numOfBankAccount);
+                    break;
+                case 2:
+                    function.showAllCustomers();
+                    break;
+                case 3:
+                    System.out.println("Enter low and high border for find credit card");
+                    int lowBorder = scanner.nextInt();
+                    int highBorder = scanner.nextInt();
+                    scanner.nextLine();
+                    function.selectedForCreditCard(lowBorder, highBorder);
+                    break;
+                case 0:
+                    System.out.println("Bye!");
+                    stop = true;
+                    break;
+                default:
+                    System.out.println("You enter not correct val");
+            }
+        }
+    }
+}
+
