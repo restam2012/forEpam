@@ -1,0 +1,28 @@
+import java.util.ArrayList;
+
+public class Sentence {
+    public ArrayList<Word> sentences;
+
+    public Sentence(ArrayList<Word> sentences){
+        this.sentences = sentences;
+    }
+    public Sentence(){
+        sentences = new ArrayList<>();
+    }
+    public Sentence(String s){
+        sentences = new ArrayList<>();
+        for (String str:s.split(" ")){
+            sentences.add(new Word(str));
+        }
+    }
+
+    public String toString(){
+        String str = new String();
+        for(Word w:sentences){
+            str += w.toString() + " ";
+        }
+        return str;
+    }
+
+
+}
