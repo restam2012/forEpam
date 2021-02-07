@@ -1,0 +1,67 @@
+import java.util.ArrayList;
+
+public class Text {
+    private ArrayList<Sentence> text;
+    private ArrayList<Word> head;
+
+    public Text(){
+        text = new ArrayList<>();
+        head = new ArrayList<>();
+    }
+
+    public Text(ArrayList<Sentence> sentences, ArrayList<Word> words){
+        text = sentences;
+        head = words;
+    }
+
+    public void addText(Sentence sentence){
+        text.add(sentence);
+    }
+
+    public void addText(String newText){
+        for(String s:newText.split("(?<=\\.|\\?|!)")){
+            text.add(new Sentence(s.trim()));
+        }
+    }
+
+    public void addText(ArrayList<Sentence> newSentences){
+        for(Sentence sentence:newSentences) {
+            text.add(sentence);
+        }
+    }
+
+    public void addHead(Word word){
+        head.add(word);
+    }
+
+    public void addHead(String newHead){
+        for(String s:newHead.split(" ")){
+            head.add(new Word(s));
+        }
+    }
+
+    public void addHead(ArrayList<Word> newHead){
+        for(Word word:newHead) {
+            head.add(word);
+        }
+    }
+
+    public void outText(){
+        System.out.println(doText(text));
+    }
+
+    public void outHead(){
+        for(Word w:head) {
+            System.out.print(w.toString() + " ");
+        }
+        System.out.println();
+    }
+
+    private StringBuilder doText (ArrayList<Sentence> text) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Sentence s:text) {
+            stringBuilder.append(s);
+        }
+        return stringBuilder;
+    }
+}
