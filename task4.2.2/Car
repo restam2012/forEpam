@@ -1,0 +1,54 @@
+import java.util.Scanner;
+
+public class Car {
+    Scanner scanner = new Scanner(System.in);
+    private String name;
+    private int fuel;
+    private Engine engine;
+    private Wheel[] wheels;
+    public Car(Wheel[] wheels){
+        this.wheels = wheels;
+        engine = new Engine();
+        fuel = 0;
+        name = "noName";
+    }
+
+    public Car(Wheel[] wheels, int fuel, String name){
+        this.wheels = wheels;
+        engine = new Engine();
+        this.fuel = fuel;
+        this.name = name;
+    }
+
+    //car with default wheel
+    public Car(){
+        wheels = new Wheel[4];
+        engine = new Engine();
+        name = "noName";
+    }
+
+    public void moving(){
+        System.out.println("Driver \"Full speed!\"");
+        engine.move(fuel);
+    }
+
+    public void refueling(int fuel){
+        this.fuel += fuel;
+        System.out.printf("In car now %d liters fuel\n", fuel);
+
+    }
+
+    public void changeWheel(Wheel w){
+        System.out.println("What wheel you want to change?");
+        for (Wheels wheels:Wheels.values()){
+            System.out.println(wheels);
+        }
+        Wheels position = Wheels.valueOf(scanner.nextLine());
+        wheels[position.ordinal()] = w;
+        System.out.println("The wheel is change for " + w.getBrand());
+    }
+
+    public void showNameOfCar(){
+        System.out.println(name);
+    }
+}
