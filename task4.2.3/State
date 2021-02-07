@@ -1,0 +1,74 @@
+import java.util.ArrayList;
+
+public class State {
+    private String name;
+    private ArrayList<Region> regions;
+    private City capital;
+
+    public State(String name, ArrayList<Region> regions, City capital) {
+        this.name = name;
+        this.regions = regions;
+        this.capital = capital;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public ArrayList<Region> getRegions() {
+        return regions;
+    }
+
+    public void setRegions(ArrayList<Region> regions) {
+        this.regions = regions;
+    }
+
+    public void addRegion(Region region){
+        regions.add(region);
+    }
+
+    public City getCapital() {
+        return capital;
+    }
+
+    public void setCapital(City capital) {
+        this.capital = capital;
+    }
+
+    @Override
+    public String toString() {
+        return "State " + name + " have: " + regions +
+                "The capital is" + capital;
+    }
+
+    public void showCapital(){
+        System.out.println(capital.toString());
+    }
+
+    public void showCountOfRegions(){
+        System.out.println("In state is " + regions.size() + " regions");
+    }
+
+    public double areaOfState(){
+        double area = 0;
+        for(Region r:regions){
+            area += r.areaOfRegion();
+        }
+        return area;
+    }
+
+    public void showAreaOfState(){
+        System.out.println("The " + name + " have area " + areaOfState() + " square kilometers.");
+    }
+
+    public void showCapitalOfRegions(){
+        System.out.println("The capital of regions is:");
+        for(Region r:regions){
+            System.out.println(r.getNameOfCapital());
+        }
+    }
+}
