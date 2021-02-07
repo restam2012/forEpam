@@ -1,0 +1,21 @@
+import java.util.ArrayList;
+
+public class Main  {
+
+    public static void main( String args[] ) {
+        City city = new City("Chausy", 50_000);
+        ArrayList<City> cities = new ArrayList<>();
+        cities.add(city);
+        ArrayList<District> districts = new ArrayList<>();
+        districts.add(new District("Chauskiy", cities, new City("Chausy", 50_000), 10_000));
+        districts.add(new District("Chericov", cities, new City("Chericov", 10_000), 5_000));
+        ArrayList<Region> regions = new ArrayList<>();
+        regions.add(new Region("Mogilevskaya", districts, new City("Mogilev", 400_000)));
+        State state = new State("Belarus", regions, new City("Minsk", 2_000_000));
+        state.showCapital();
+        state.showCountOfRegions();
+        state.showAreaOfState();
+        state.showCapitalOfRegions();
+    }
+}
+
