@@ -1,0 +1,35 @@
+public class City {
+    private String name;
+    private int countOfPeople;
+
+    public City(String name, int countOfPeople) {
+        this.name = name;
+        this.countOfPeople = countOfPeople;
+    }
+
+    public City(String name){
+        this.name = name;
+        countOfPeople = -1;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getCountOfPeople() {
+        return countOfPeople;
+    }
+
+    public void setCountOfPeople(int countOfPeople) {
+        this.countOfPeople = countOfPeople;
+    }
+
+    @Override
+    public String toString() {
+        return "City " + name + " have " + countOfPeople + " peoples";
+    }
+}
