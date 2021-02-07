@@ -1,0 +1,53 @@
+import java.util.ArrayList;
+
+public class District {
+    private String name;
+    private ArrayList<City> cities;
+    private City districtCenter;
+    private double area;
+
+    public District(String name, ArrayList<City> cities, City districtCenter, double area) {
+        this.name = name;
+        this.cities = cities;
+        this.districtCenter = districtCenter;
+        this.area = area;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public ArrayList<City> getCities() {
+        return cities;
+    }
+
+    public void addCity(City city) {
+        cities.add(city);
+    }
+
+    public City getDistrictCenter() {
+        return districtCenter;
+    }
+
+    public void setDistrictCenter(City districtCenter) {
+        this.districtCenter = districtCenter;
+    }
+
+    public double getArea() {
+        return area;
+    }
+
+    public void setArea(double area) {
+        this.area = area;
+    }
+
+    @Override
+    public String toString() {
+        return "District " + name + " have cities:" + cities +
+                ". The capital of district is " + districtCenter;
+    }
+}
