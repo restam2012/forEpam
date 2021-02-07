@@ -1,0 +1,8 @@
+public class Engine {
+    public void move(int fuel){
+        if(fuel > 0) {
+            System.out.println("Engine \"Yes full speed!\"");
+        }
+        else System.out.println("Engine \"I need fuel X_X\"");
+    }
+}
