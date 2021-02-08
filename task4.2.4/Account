@@ -1,0 +1,41 @@
+public class Account {
+    private int id;
+    private double money;
+    private boolean blocked;
+    public Account(int id, double money){
+        this.money = money;
+        blocked = false;
+        this.id = id;
+    }
+
+    public void blockedAccount(){
+        blocked = true;
+    }
+    public void unblockedAccount(){
+        blocked = false;
+    }
+
+    public double getMoney() {
+        return money;
+    }
+
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void addMoney(double money){
+        this.money += money;
+    }
+
+    public void subMoney(double money){
+        this.money -= money;
+    }
+
+    public int getId(){
+        return id;
+    }
+
+    public String toString(){
+        return "Id of account is " + id + ". On the account " + money + " dollars. The account is blocked? " + blocked;
+    }
+}
