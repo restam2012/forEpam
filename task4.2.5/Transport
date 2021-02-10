@@ -1,0 +1,3 @@
+public enum Transport {
+    BUS, TRAIN, PLAIN, CAR, SHIP
+}
