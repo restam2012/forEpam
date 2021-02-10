@@ -1,0 +1,87 @@
+import java.util.ArrayList;
+
+public class TourPackage {
+    private String name;
+    private ArrayList<Type> type;
+    private Transport transport;
+    private int countEat;
+    private int day;
+    private double prise;
+
+    public TourPackage(String name, Transport transport, int countEat, int day, double prise, Type ... types) {
+        this.name = name;
+        this.transport = transport;
+        this.countEat = countEat;
+        this.day = day;
+        this.prise = prise;
+        type = new ArrayList<>();
+        for (Type t:types){
+            type.add(t);
+        }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public ArrayList<Type> getType() {
+        return type;
+    }
+
+    public void addType(Type t){
+        type.add(t);
+    }
+
+    public void setType(ArrayList<Type> type) {
+        this.type = type;
+    }
+
+    public boolean isHas(Type t){
+        for(Type t1:type){
+            if(t1.equals(t)) return true;
+        }
+        return false;
+    }
+
+    public Transport getTransport() {
+        return transport;
+    }
+
+    public void setTransport(Transport transport) {
+        this.transport = transport;
+    }
+
+    public int getCountEat() {
+        return countEat;
+    }
+
+    public void setCountEat(int countEat) {
+        this.countEat = countEat;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
+    }
+
+    public double getPrise() {
+        return prise;
+    }
+
+    public void setPrise(double prise) {
+        this.prise = prise;
+    }
+
+    @Override
+    public String toString() {
+        return "Tour package " + name + ", type is " + type + ", by " + transport +
+                " with " + countEat + " times of eat, for " + day + " days. Cost " + prise + " dollars.";
+    }
+}
