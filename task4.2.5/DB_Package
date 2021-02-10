@@ -1,0 +1,137 @@
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Scanner;
+
+public class DB_Package {
+    private ArrayList<TourPackage> tourPackages;
+
+    public DB_Package() {
+        tourPackages = new ArrayList<>();
+    }
+
+    public DB_Package(ArrayList<TourPackage> tourPackages) {
+        this.tourPackages = tourPackages;
+    }
+
+    public DB_Package(TourPackage t){
+        tourPackages = new ArrayList<>();
+        tourPackages.add(t);
+    }
+
+    public void addPackage(String name, Transport transport, int countEat, int day, double price, Type ... t){
+        tourPackages.add(new TourPackage(name, transport, countEat, day, price, t));
+    }
+
+    public void showPackage(){
+        boolean stop = false;
+        Scanner scanner = new Scanner(System.in);
+        Type type = null;
+        Transport transport = null;
+        int eat = -1;
+        int lessDay = -1;
+        int moreDay = -1;
+        double lessPrice = -1;
+        double morePrice = -1;
+
+        ArrayList<TourPackage> clonePackage = new ArrayList<>();
+        for(TourPackage t:tourPackages){
+            clonePackage.add(t);
+        }
+        while (!stop){
+            System.out.println("Let's setting filter. Enter criteria you need to travel.");
+            System.out.println("Type");
+            System.out.println("Transport");
+            System.out.println("Eat");
+            System.out.println("Days");
+            System.out.println("Price");
+            System.out.println("End");
+            String selected = scanner.nextLine().trim();
+
+            switch (selected){
+                case "Type":
+                    System.out.println("Check type from the list:");
+                    for(Type t:Type.values()){
+                        System.out.println(t);
+                    }
+                    type = Type.valueOf(scanner.nextLine().trim());
+                    break;
+                case "Transport":
+                    System.out.println("Check transport from the list:");
+                    for(Transport t:Transport.values()){
+                        System.out.println(t);
+                    }
+                    transport = Transport.valueOf(scanner.nextLine().trim());
+                    break;
+                case "Eat":
+                    System.out.println("How many meals a day will the package consist. Enter the num from 0 to 3 (no less)");
+                    eat = Integer.parseInt(scanner.nextLine());
+                    break;
+                case "Days":
+                    System.out.println("Enter, how many days you want travel. Enter two value - no less and no more");
+                    lessDay = scanner.nextInt();
+                    moreDay = scanner.nextInt();
+                    scanner.nextLine();
+                    break;
+                case "Price":
+                    System.out.println("Enter, how mach money you can spend. Enter two double value - no less and no more");
+                    lessPrice = scanner.nextDouble();
+                    morePrice = scanner.nextDouble();
+                    scanner.nextLine();
+                    break;
+                case "End":
+                    stop = true;
+                    break;
+                default:
+                    System.out.println("You enter not correct value");
+            }
+        }
+
+        for(TourPackage t:tourPackages){
+            if(type != null && !t.isHas(type)){
+                clonePackage.remove(t);
+            }
+            if(transport != null && !t.getTransport().equals(transport)){
+                clonePackage.remove(t);
+            }
+            if(eat > -1 && t.getCountEat() < eat){
+                clonePackage.remove(t);
+            }
+            if((lessDay > -1 && t.getDay() < lessDay) || (moreDay > -1 && t.getDay() > moreDay)){
+                clonePackage.remove(t);
+            }
+            if((lessPrice > -1 && t.getPrise() < lessPrice) || (morePrice > -1 && t.getPrise() > morePrice)){
+                clonePackage.remove(t);
+            }
+        }
+        showTour(clonePackage);
+    }
+
+    public void sortByPrice(){
+        tourPackages.sort(new Comparator<TourPackage>() {
+            @Override
+            public int compare(TourPackage o1, TourPackage o2) {
+                if(o1.getPrise() > o2.getPrise()) return 1;
+                else if(o1.getPrise() < o2.getPrise()) return -1;
+                else return 0;
+            }
+        });
+    }
+
+    public void sortByDay(){
+        tourPackages.sort(new Comparator<TourPackage>() {
+            @Override
+            public int compare(TourPackage o1, TourPackage o2) {
+                if(o1.getDay() > o2.getDay()) return 1;
+                else if(o1.getDay()< o2.getDay()) return -1;
+                else return 0;
+            }
+        });
+    }
+
+
+    public void showTour(ArrayList<TourPackage> tourPackages){
+        for(TourPackage tourPackage:tourPackages){
+            System.out.println(tourPackage.toString());
+        }
+    }
+}
