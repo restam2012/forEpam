@@ -1,0 +1,22 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+
+public class TextFile extends MyFile {
+    TextFile(Folder folder, String name, String text){
+        super(folder, name, "txt", text);
+    }
+
+    TextFile(File file) throws FileNotFoundException {
+        super(file);
+    }
+    public void showText(){
+        System.out.println(getText());
+    }
+
+    public void addText(String newText){
+        StringBuilder text = new StringBuilder(getText());
+        text.append(newText);
+        setText(text.toString());
+        createFile();
+    }
+}
