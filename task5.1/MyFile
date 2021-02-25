@@ -1,0 +1,71 @@
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Scanner;
+
+public class MyFile {
+    private Folder folder;
+    private String name;
+    private String type;
+    private String text;
+    Path pathToFile;
+
+    public MyFile(Folder folder, String name, String type, String text) {
+        this.folder = folder;
+        this.name = name;
+        this.type = type;
+        this.text = text;
+        setPath();
+    }
+
+    public MyFile(File file) throws FileNotFoundException{
+        if(!file.exists()) throw new FileNotFoundException();
+        else {
+            text = new String();
+            String path = file.getPath();
+            folder = new Folder(Path.of(path.substring(0, path.lastIndexOf("\\"))));
+            name = file.getName().substring(0, file.getName().lastIndexOf("."));
+            type = file.getName().substring(file.getName().lastIndexOf(".") + 1);
+            try (FileReader reader = new FileReader(file)){
+                Scanner scanner = new Scanner(reader);
+                while (scanner.hasNext()){
+                    text += scanner.nextLine() + "\n";
+                }
+            } catch (IOException e){e.printStackTrace();}
+        }
+    }
+
+    private void setPath(){
+        pathToFile = Path.of(folder + "\\" + name + "." + type);
+    }
+
+    public void createFile(){
+        try (PrintWriter fileWriter = new PrintWriter(pathToFile.toFile())) {
+            fileWriter.print(text);
+        } catch (IOException e){ e.printStackTrace(); }
+    }
+
+    public void changeName(String name){
+        delete();
+        this.name = name;
+        setPath();
+        try (PrintWriter fileWriter = new PrintWriter(pathToFile.toFile())) {
+            fileWriter.print(text);
+        } catch (IOException e){ e.printStackTrace(); }
+    }
+
+    public void delete(){
+        try {
+            Files.delete(Path.of(folder + "\\" + name + "." + type));
+        } catch (IOException e){ e.printStackTrace(); }
+    }
+
+    String getText() {
+        return text;
+    }
+
+    void setText(String text) {
+        this.text = text;
+    }
+
+}
