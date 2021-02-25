@@ -1,0 +1,14 @@
+import java.nio.file.Path;
+
+public class Folder {
+    Path path;
+
+    public Folder(Path path) {
+        this.path = path;
+    }
+
+    @Override
+    public String toString() {
+        return path.toString();
+    }
+}
