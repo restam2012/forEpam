@@ -1,0 +1,31 @@
+package by.epam.lesson5.task4;
+
+public class Treasure {
+    private String name;
+    private double price;
+    private double weight;
+
+    public Treasure(String name, double price, double weight) {
+        this.name = name;
+        this.price = price;
+        this.weight = weight;
+    }
+
+    @Override
+    public String toString() {
+        return  name + "\t" + price + "\t" + weight;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+}
