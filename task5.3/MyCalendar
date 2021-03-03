@@ -1,0 +1,88 @@
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Objects;
+
+public class MyCalendar {
+    private ArrayList<PlayDay> daysOff = new ArrayList<>();
+    private class PlayDay{
+        Calendar day;
+        TypeOfDay type;
+        String name;
+
+        private PlayDay(Calendar day, TypeOfDay type, String name) {
+            this.day = day;
+            this.type = type;
+            this.name = name;
+        }
+
+        private PlayDay(Calendar day, TypeOfDay type) {
+            this.day = day;
+            this.type = type;
+            if(type.equals(TypeOfDay.DAY_OFF)){
+                name = "day off";
+            }
+            else {
+                name = "unknown";
+            }
+        }
+
+        private PlayDay(Calendar day) {
+            this.day = day;
+        }
+        DateFormat df = new SimpleDateFormat("DD/MM/YYYY");
+
+        private void work(){
+            System.out.println("Today you can rest");
+        }
+
+        @Override
+        public String toString() {
+            return  type + ": " + df.format(day) + ", name is" + name;
+        }
+
+        public Calendar getDay() {
+            return day;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            PlayDay playDay = (PlayDay) o;
+            return day.get(Calendar.YEAR) == (playDay.day.get(Calendar.YEAR)) &&
+                    day.get(Calendar.MONTH) == (playDay.day.get(Calendar.MONTH)) &&
+                    day.get(Calendar.DAY_OF_MONTH) == (playDay.day.get(Calendar.DAY_OF_MONTH));
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(day.get(Calendar.YEAR)) + Objects.hash(day.get(Calendar.MONTH)) + Objects.hash(day.get(Calendar.DAY_OF_MONTH));
+        }
+    }
+
+    public void addDayOff(Calendar c, TypeOfDay type, String name){
+        PlayDay playDay = new PlayDay(c, type, name);
+        daysOff.add(playDay);
+    }
+
+    public void addDayOff(Calendar c, TypeOfDay type){
+        addDayOff(c, type, "unknown");
+    }
+
+    public void checkDay(Calendar c){
+        PlayDay p = new PlayDay(c);
+        if(daysOff.contains(p)){
+            p.work();
+        }
+        else {
+            work();
+        }
+    }
+
+    private void work(){
+        System.out.println("Today you mast work!");
+    }
+
+}
