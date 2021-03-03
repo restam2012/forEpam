@@ -1,0 +1,65 @@
+package by.epam.lesson5.task4;
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        boolean stop = false;
+        Scanner scanner = new Scanner(System.in);
+        Den den = new Den();
+        while (!stop) {
+            System.out.println("Select action:");
+            System.out.println("1. Add new treasure");
+            System.out.println("2. Delete treasure");
+            System.out.println("3. Show all treasure");
+            System.out.println("4. Show the most expensive");
+            System.out.println("5. Show treasure by price");
+            System.out.println("6. Save in file");
+            System.out.println("7. Get from file");
+            System.out.println("0. Exit");
+            switch (Integer.valueOf(scanner.nextLine())){
+                case 1:
+                    //Создание нового сокровища и добавление его в список
+                    System.out.println("Enter name of treasure:");
+                    String name = scanner.nextLine();
+                    System.out.println("Enter price:");
+                    double price = Double.valueOf(scanner.nextLine());
+                    System.out.println("Enter weight:");
+                    double weight = Double.valueOf(scanner.nextLine());
+                    Treasure treasure = new Treasure(name, price, weight);
+                    den.addTreasures(treasure);
+                    break;
+                case 2:
+                    //Удаление сокровища по имени
+                    System.out.println("Enter name:");
+                    den.deleteTreasures(scanner.nextLine());
+                    break;
+                case 3:
+                    den.showTreasure();
+                    break;
+                case 4:
+                    den.showMaxPrice();
+                    break;
+                case 5:
+                    System.out.println("Enter price:");
+                    den.showTreasureByPrice(Double.valueOf(scanner.nextLine()));
+                    break;
+                case 6:
+                    den.saveTreasure();
+                    break;
+                case 7:
+                    den.getFromFile();
+                    break;
+                case 0:
+                    System.out.println("Bye!");
+                    stop = true;
+                    break;
+                default:
+                    System.out.println("Not correct input, try again.");
+            }
+
+        }
+    }
+
+
+}
