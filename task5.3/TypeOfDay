@@ -1,0 +1,3 @@
+public enum TypeOfDay {
+    DAY_OFF, HOLIDAY
+}
