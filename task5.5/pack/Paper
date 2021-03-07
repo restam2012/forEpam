@@ -1,0 +1,36 @@
+package by.epam.lesson5.task5.pack;
+
+import java.util.Objects;
+
+public class Paper implements Pack {
+
+    double value;
+    public Paper(double value) {
+        this.value = value;
+    }
+
+    //area of paper for pack present 1 cub m value
+    @Override
+    public double size() {
+        return 6 * value;
+    }
+
+    @Override
+    public String take() {
+        String size = String.format("%.2f", size());
+        return "paper not less of " + size + " sq m" ;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Paper paper = (Paper) o;
+        return Double.compare(paper.value, value) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
+}
