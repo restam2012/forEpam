@@ -1,0 +1,58 @@
+package by.epam.lesson5.task5;
+
+import by.epam.lesson5.task5.pack.*;
+import by.epam.lesson5.task5.sweet.*;
+
+import java.util.Objects;
+
+
+public class Present {
+    private Sweet sweet;
+    private Pack pack;
+    private FactorySweet factorySweet = new FactorySweet();
+    private FactoryPack factoryPack = new FactoryPack();
+
+    public Present(String sweetsType, String packsType, double weight) throws IllegalArgumentException{
+        try {
+            sweet = factorySweet.getSweet(SweetsType.valueOf(sweetsType.trim().toUpperCase()), weight);
+            pack = factoryPack.getPack(PacksType.valueOf(packsType.trim().toUpperCase()), sweet);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("You enter not correct type");
+        }
+    }
+
+    public double getWeight(){
+        return sweet.getWeight();
+    }
+
+    public double getSize(){
+        return pack.size();
+    }
+
+    public void setSweet(Sweet sweet) {
+        this.sweet = sweet;
+        pack = factoryPack.getPack(pack.getPack(), sweet);
+    }
+
+    public void setPack(Pack pack) {
+        this.pack = pack;
+    }
+
+    public String getAction(){
+        return sweet.take() + " and " + pack.take();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Present present = (Present) o;
+        return sweet.equals(present.sweet) &&
+                pack.equals(present.pack);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sweet, pack);
+    }
+}
