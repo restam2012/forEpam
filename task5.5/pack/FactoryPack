@@ -1,0 +1,13 @@
+package by.epam.lesson5.task5.pack;
+
+import by.epam.lesson5.task5.sweet.Sweet;
+
+public class FactoryPack {
+    public Pack getPack(PacksType type, Sweet sweet){
+        Pack pack = switch (type){
+            case PAPER -> new Paper(sweet.getVolume());
+            case GIFT_BAG -> new GiftBag(sweet.getVolume());
+        };
+        return pack;
+    }
+}
