@@ -1,0 +1,36 @@
+package by.epam.lesson5.task5.pack;
+
+import java.util.Objects;
+
+public class GiftBag implements Pack {
+    double value;
+
+    public GiftBag(double value) {
+        this.value = value;
+    }
+
+    //area of paper for pack present 1 cub m value
+    @Override
+    public double size() {
+        return 1 * value;
+    }
+
+    @Override
+    public String take() {
+        String size = String.format("%.2f", size());
+        return "gift back not less volume of " + size + " cub m";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GiftBag giftBag = (GiftBag) o;
+        return Double.compare(giftBag.value, value) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
+}
