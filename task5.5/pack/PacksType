@@ -1,0 +1,5 @@
+package by.epam.lesson5.task5.pack;
+
+public enum  PacksType {
+    GIFT_BAG, PAPER
+}
