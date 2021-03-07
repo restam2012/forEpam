@@ -1,0 +1,5 @@
+package by.epam.lesson5.task5.sweet;
+
+public enum SweetsType {
+    CANDY, CHOCOLATE, BISCUIT
+}
