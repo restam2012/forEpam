@@ -1,0 +1,9 @@
+package by.epam.lesson5.task5.pack;
+
+public interface Pack {
+    double size();
+    String take();
+    default PacksType getPack() {
+        return PacksType.valueOf(this.getClass().getName());
+    }
+}
