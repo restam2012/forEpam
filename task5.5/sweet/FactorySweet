@@ -1,0 +1,12 @@
+package by.epam.lesson5.task5.sweet;
+
+public class FactorySweet {
+        public Sweet getSweet(SweetsType type, double weight){
+            Sweet sweet = switch (type){
+                case CANDY -> new Candy(weight);
+                case BISCUIT -> new Biscuit(weight);
+                case CHOCOLATE -> new Chocolate(weight);
+            };
+            return sweet;
+        }
+}
