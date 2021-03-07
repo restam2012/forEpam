@@ -1,0 +1,38 @@
+package by.epam.lesson5.task5.sweet;
+
+import java.util.Objects;
+
+public class Candy implements Sweet {
+    double weight;
+    Candy(double weight){
+        this.weight = weight;
+    }
+
+    @Override
+    public double getVolume() {
+        return weight / 1.3;
+    }
+
+    @Override
+    public String take() {
+        return "Take " + weight + " kilogram of candy";
+    }
+
+    @Override
+    public double getWeight() {
+        return weight;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Candy candy = (Candy) o;
+        return Double.compare(candy.weight, weight) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(weight);
+    }
+}
