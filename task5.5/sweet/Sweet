@@ -1,0 +1,7 @@
+package by.epam.lesson5.task5.sweet;
+
+public interface Sweet {
+    double getVolume();
+    String take();
+    double getWeight();
+}
