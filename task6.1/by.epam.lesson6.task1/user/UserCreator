@@ -1,0 +1,159 @@
+package by.epam.lesson6.task1.users;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.Base64;
+import java.util.Scanner;
+
+public class UserCreator {
+    File users = new File("./data/Users.txt"); //Файл, где храняться пользователи
+    File key = new File("./data/Key.txt"); //Файл, где храняться пароли
+
+
+    //Добавление нового пользователя
+    public AbstractUser createUser(String login, String password, boolean isAdmin, String eMail){
+
+        if(!checkUser(login, users)){
+            return null;
+        }
+        return addUser(login, password, isAdmin, eMail, users);
+    }
+
+    protected boolean checkUser(String login, File file){
+        //Проверяем, не занято ли имя, если занято, возвращаем false
+        try (FileReader fileReader = new FileReader(file)){
+            Scanner scanner = new Scanner(fileReader);
+            while (scanner.hasNext()){
+                String[] information = scanner.next().split("\t");
+                if(information[0].equals(login)){
+                    System.out.println("This login is busy. Please, try again.");
+                    return false;
+                }
+            }
+        } catch (Exception e){
+            System.out.println("Exception " + e.getStackTrace() + ". Pleas, call to administrator.");
+            return false;
+        }
+        return true;
+    }
+
+    protected AbstractUser addUser(String login, String password, boolean isAdmin, String eMail, File file){
+        //Добавление нового пользователя. Для этого открываем для записи файл с пользователями и считываем ключ шифрования
+        try (FileWriter fileWriter = new FileWriter(file, true); FileReader fileReader = new FileReader(key)){
+            //Для шифрования
+            String stringKey = new Scanner(fileReader).nextLine();
+            byte[] decodedKey = Base64.getDecoder().decode(stringKey);
+            SecretKey key = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+            String encryptText = Base64.getEncoder().encodeToString(cipher.doFinal(password.getBytes()));
+            //Запись в файл
+            fileWriter.write(login + "\t" + encryptText + "\t" + isAdmin + "\t" + eMail + "\n");
+            if(isAdmin) {
+                return new Admin(login, "**", eMail);
+            }
+            else return new User(login, "**", eMail);
+        }
+        catch (Exception e){
+            System.out.println("Exception is: \"" + e.getMessage() + "\". Pleas, call to administrator.");
+            return null;
+        }
+    }
+
+    //Проверка выполнения требований к логину
+    protected boolean checkLogin(String login){
+        /*К логину предъявляются следующие требования:
+    логин должен начинаться с буквы и состоять не менее чем из 6 символов и не более чем из 20 символов;
+    при создании логина можно использовать латинские буквы, цифры, символы тире (-), подчеркивания (_) и точки (.);
+    знак @ в логине недопустим;
+    пробел в логине недопустим;
+    логин не может заканчиваться точкой.
+    Логин можно вводить в любом регистре (PETROV, petrov и PeTrOv - один и тот же логин). */
+
+        if(login.matches("[A-Za-z][\\w-_\\.]{4,18}[\\w-_]$")){
+            return true;
+        }
+        return false;
+    }
+
+    //Проверка требований к паролю
+    protected boolean checkPassword(String password){
+        /*Пароль вашей учетной записи должен соответствовать следующим требованиям:
+    не менее 8 символов;
+    не более 128 символов;
+    как минимум одна заглавная и одна строчная буква;
+    как минимум одна цифра;
+    только арабские цифры;
+    без пробелов;
+    могут быть символы ! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _` { | } */
+
+        if(password.matches("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[\\w!\"#$%'\\(\\)\\*\\+,\\-\\./:;<=>\\?@\\[\\\\\\]\\^_`\\{\\|\\}]{8,128}")){
+            return true;
+        }
+        return false;
+    }
+
+    //Проверка требований к почте
+    protected boolean checkEmail(String email){
+        /*Из вики
+        * Local-part
+The local-part of the email address may be unquoted or may be enclosed in quotation marks.
+
+If unquoted, it may use any of these ASCII characters:
+
+uppercase and lowercase Latin letters A to Z and a to z
+digits 0 to 9
+printable characters !#$%&'*+-/=?^_`{|}~
+dot ., provided that it is not the first or last character and provided also that it does not appear consecutively
+*
+* he domain name part of an email address has to conform to strict guidelines: it must match the requirements for a hostname, a list of dot-separated DNS labels, each label being limited to a length of 63 characters and consisting of:[5]:§2
+
+uppercase and lowercase Latin letters A to Z and a to z;
+digits 0 to 9, provided that top-level domain names are not all-numeric;
+hyphen -, provided that it is not the first or last character*
+
+Про домент не полностью расписано. Предположу, что последняя часть должна состоять из .[буквы или цифры]/
+         */
+
+        if(email.matches("[\\w\\!#$%&'\\*\\+\\-/=\\?\\^`\\{\\|\\}~][\\w\\!#$%&'\\*\\+\\-/=\\?\\^`\\{\\|\\}~\\.]*[\\w\\!#$%&'\\*\\+\\-/=\\?\\^`\\{\\|\\}~]@[\\w][\\w-]*[\\w]\\.[\\w]*")){
+            return true;
+        }
+        return false;
+    }
+
+//Залогиниться
+    public AbstractUser logIn(String login, String pass){
+        try (FileReader readerUsers = new FileReader(users); FileReader readerKey = new FileReader(key)){
+            Scanner scannerUser = new Scanner(readerUsers);
+            while (scannerUser.hasNext()) {
+                String[] information = scannerUser.nextLine().split("\t");
+                if (information[0].equals(login)) {
+                    Scanner scannerKey = new Scanner(key);
+                    byte[] myKeyByte = Base64.getDecoder().decode(scannerKey.nextLine());
+                    SecretKey myKey = new SecretKeySpec(myKeyByte, 0, myKeyByte.length, "AES");
+                    Cipher cipher = Cipher.getInstance("AES");
+                    cipher.init(Cipher.DECRYPT_MODE, myKey);
+
+                    byte[] plainText = Base64.getDecoder().decode(information[1]);
+                    byte[] cipherText = cipher.doFinal(plainText);
+                    String decoderPass = new String(cipherText);
+                    if (pass.equals(decoderPass)) {
+                        System.out.println("Hi, " + information[0]);
+                        if (information[2].equals("true")){
+                            return new Admin(information[0], "*****", information[3]);
+                        }
+                        else return new User(information[0], "*****", information[3]);
+                    }
+                }
+            }
+        }
+        catch (Exception e){e.printStackTrace();}
+        return null;
+    }
+
+
+}
