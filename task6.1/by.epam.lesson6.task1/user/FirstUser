@@ -1,0 +1,98 @@
+package by.epam.lesson6.task1.users;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class FirstUser {
+    Scanner scanner = new Scanner(System.in);
+    UserCreator userCreator = new UserCreator();
+
+    public AbstractUser addUser(){
+        String login, password, eMail;
+        login = setLogin();
+        password = setPassword();
+        eMail = setEmail();
+
+        File file = new File("./data/Users.txt"); //Файл, где храняться пользователи
+        return new UserCreator().addUser(login, password, false, eMail, file);
+    }
+
+    public AbstractUser addFirstUser() {
+        String login, password, eMail;
+        login = setLogin();
+        password = setPassword();
+        eMail = setEmail();
+
+        File file = new File("./data/Users.txt"); //Файл, где храняться пользователи
+        return new UserCreator().addUser(login, password, true, eMail, file);
+    }
+
+    private String setLogin() {
+        String login;
+        ifIncorrectLogin: while (true) {
+            System.out.println("Enter login");
+            login = scanner.nextLine();
+            if (!userCreator.checkLogin(login)) {
+                System.out.println("Your login not suitable for safety requirements.");
+                System.out.println("Login mast suit requirement:");
+                System.out.println("    login must start with a letter and consist of at least 6 characters and no more than 20 characters;\n" +
+                        "   when creating a login, you can use Latin letters, numbers, dashes (-), underscores (_) and periods (.);\n" +
+                        "   @ sign in login is not allowed;\n" +
+                        "   a space in the login is not allowed;\n" +
+                        "   login cannot end with a period;\n" +
+                        "   login can be entered in any register");
+                continue;
+            }
+            try (FileReader readUsers = new FileReader("./data/Users.txt")){
+                Scanner readUser = new Scanner(readUsers);
+                while (readUser.hasNext()){
+                    String log = readUser.nextLine().trim().split("\t")[0];
+                    if(log.equals(login)){
+                        System.out.println("This login is already taken, enter other");
+                        continue ifIncorrectLogin;
+                    }
+                }
+            } catch (IOException e){e.printStackTrace();}
+            break;
+        }
+        return login;
+    }
+
+    private String setPassword() {
+        String password;
+        while (true) {
+            System.out.println("Enter password");
+            password = scanner.nextLine();
+            if (!userCreator.checkPassword(password)) {
+                System.out.println("Your password not suitable for safety requirements.");
+                System.out.println("Password mast suit requirement:");
+                System.out.println("    at least 8 characters;\n" +
+                        "     no more than 128 characters;\n" +
+                        "     at least one uppercase and one lowercase letter;\n" +
+                        "     at least one digit;\n" +
+                        "     only Arabic numerals;\n" +
+                        "     without spaces;\n" +
+                        "     there may be symbols  ! \" # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _` { | }");
+                continue;
+            }
+            break;
+        }
+        return password;
+    }
+
+    private String setEmail() {
+        String eMail;
+        while (true) {
+            System.out.println("Enter email");
+            eMail = scanner.nextLine();
+            if (!userCreator.checkEmail(eMail)) {
+                System.out.println("You enter not correct email");
+                continue;
+            }
+            break;
+        }
+        return eMail;
+    }
+}
