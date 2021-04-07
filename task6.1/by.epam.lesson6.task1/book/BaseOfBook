@@ -1,1 +1,288 @@
+package by.epam.lesson6.task1.book;
 
+import by.epam.lesson6.task1.mail.FetchEmail;
+import by.epam.lesson6.task1.mail.SenderEmail;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class BaseOfBook {
+    List<Book> books = new ArrayList<>();
+    File fileOfBooks = new File("./data/Books.txt");
+    //Блок инициализации, в котором все книги из текстового файла выкачиваются в список.
+    {
+        if(fileOfBooks.exists() && fileOfBooks.length() != 0){
+            try (FileReader readerBooks = new FileReader(fileOfBooks)){
+                Scanner scanner = new Scanner(readerBooks);
+                while (scanner.hasNext()){
+                    String[] informationAboutBook = scanner.nextLine().split("\t");
+
+                    books.add(new Book(informationAboutBook[0], informationAboutBook[1], Genre.valueOf(informationAboutBook[2]),
+                            Type.valueOf(informationAboutBook[3]), informationAboutBook[4], informationAboutBook[5]));
+
+                }
+            } catch (IOException e) {e.printStackTrace();}
+        }
+    }
+    //Запускает просмотр всех книг
+    public void showBooks(){
+        showBooksFormArray(books, "If you want open full description");
+    }
+
+    //Работает по аналогии ctrl+f - ищет любое упоминание данной строки в book.toString, и отправляет его на вывод по страницам
+    public void find(String combination){
+        List<Book> findBook = new ArrayList<>();
+        Pattern pattern = Pattern.compile(combination);
+        for (Book b:books) {
+            Matcher matcher = pattern.matcher(b.toString());
+            if(matcher.find()){
+                findBook.add(b);
+            }
+        }
+        showBooksFormArray(findBook, "If you want open full description");
+    }
+
+//Метод для просмотра книг
+    private void showBooksFormArray(List<Book> arrayListOfBook, String text) {
+        //String name, String author, Genre genre, Type type, String description, String storage
+        if (!arrayListOfBook.isEmpty()) {
+            Book[] massOfBook = toMass(arrayListOfBook);
+            double pagesDouble = new BigDecimal(massOfBook.length / 10.0).setScale(0, RoundingMode.UP).doubleValue();
+            int pages = (int) pagesDouble;
+            int currentPage = 1;
+
+            Scanner scanner = new Scanner(System.in);
+            String choice = "start";
+            while (!choice.matches("e|0")) {
+                shower(currentPage, massOfBook, pages);
+
+                if (currentPage < pages) {
+                    System.out.print("If you want go to next page, press 'n'. ");
+                }
+                if (currentPage != 1) {
+                    System.out.print("If you want go to previous page - press 'p'. ");
+                }
+                System.out.print("If you want go to necessary page - enter 'page' and necessary page. ");
+                System.out.print(text + " - enter № of book on page. ");
+                System.out.println("To exit press 'e' or '0'\n");
+
+                choice = scanner.nextLine().trim().toLowerCase();
+                //Следующая страница
+                if (choice.equals("n")) {
+                    if (currentPage >= pages) System.out.println("You can't go to next page");
+                    else currentPage++;
+                }
+                //Предыдущая страница
+                else if (choice.equals("p")) {
+                    if (currentPage <= 1) System.out.println("You can't go to previous page");
+                    else currentPage--;
+                }
+                //Указать страницу
+                else if (choice.matches("page \\d+")) {
+                    choice = choice.replaceAll("^page\\s*", "");
+                    System.out.println(choice);
+                    int p = Integer.parseInt(choice);
+                    if (p <= pages && p >= 1) currentPage = p;
+                    else System.out.println("This is non-existent page");
+                }
+                //Выход
+                else if (choice.equals("e") || choice.equals("0")) System.out.println("OK");
+                    //Указать номер записи, далее из text определяется, что будет делаться с данной записью
+                else if (choice.trim().matches("\\d+")) {
+                    int p = Integer.parseInt(choice) - 1;
+                    int position = 10 * (currentPage - 1) + p;
+                    //Открыть полную информацию
+                    if (text.contains("full")) {
+                        System.out.println(massOfBook[position]);
+                    }
+                    //Удалить выбранную запись
+                    else if (text.contains("del")) {
+                        books.remove(massOfBook[position]);
+                        massOfBook = toMass(books);
+                    }
+                    //Изменить выбранную запись
+                    else if (text.contains("modify")) {
+                        Book selectBook = massOfBook[position];
+                        System.out.println(selectBook);
+                        while (true) {
+                            System.out.println("What want you refactor? You can change name, author, genre, type, description, storage or exit. Enter one of this word.");
+                            String ch = scanner.nextLine().toLowerCase().trim();
+                            switch (ch) {
+                                case "name":
+                                    System.out.println("Enter new name:");
+                                    String name = scanner.nextLine().trim();
+                                    selectBook.setName(name);
+                                    break;
+                                case "author":
+                                    System.out.println("Enter new author:");
+                                    String author = scanner.nextLine().trim();
+                                    selectBook.setAuthor(author);
+                                    break;
+                                case "genre":
+                                    Genre genre = checkGenre();
+                                    selectBook.setGenre(genre);
+                                    break;
+                                case "type":
+                                    Type type = checkType();
+                                    selectBook.setType(type);
+                                    break;
+                                case "description":
+                                    SenderEmail sender = new SenderEmail();
+                                    System.out.println("Enter new description:");
+                                    String description = scanner.nextLine().trim();
+                                    selectBook.setDescription(description);
+                                    //Если меняется описание, отправить всем пользователям сообщение
+                                    sender.sendEmail("The description of the book was modify", "Hi, it is a ebook bot. In our library was modify description of the book " + selectBook.getName());
+                                    break;
+                                case "storage":
+                                    System.out.println("Enter new storage:");
+                                    String storage = scanner.nextLine().trim();
+                                    selectBook.setStorage(storage);
+                                    break;
+                                case "exit":
+                                    return;
+                                default:
+                                    System.out.println("You enter not correct word");
+                            }
+                            massOfBook[position] = selectBook;
+                            books = Arrays.asList(massOfBook);
+                        }
+                    }
+                    else if(text.contains("add")){
+                        addNewBook(massOfBook[position]);
+                        arrayListOfBook.remove(massOfBook[position]);
+                        massOfBook = toMass(arrayListOfBook);
+                    }
+                } else System.out.println("You enter not correct val");
+                System.out.println();
+            }
+        }
+        else {
+            System.out.println("The can't find any book");
+        }
+    }
+
+
+
+//Шаблон текста для просмотра одной страницы
+    private void shower(int page, Book[] massOfBook, int pages){
+        int pageCoefficient = (page - 1) * 10;
+        String head = "№\tName\tAuthor\tGenre\tType";
+        System.out.println(head);
+        for(int i = 0; i < 10 && pageCoefficient + i < massOfBook.length; i++){
+            try {
+                System.out.println((i + 1) + "\t" + massOfBook[i + pageCoefficient].showShortedDescription());
+            }catch (NullPointerException e){}
+        }
+        System.out.println("Page " + page + " of " + pages);
+    }
+
+    //Изменение каталога, может делать только админ
+    public void modify(){
+        SenderEmail sender = new SenderEmail();
+        while (true) {
+            System.out.println("What want you do? Press '1', if you wand add new book, '2' if you want delete book, '3' if you want modify information about book, '4' if you wand check books from email, '0' to exit");
+            Scanner scanner = new Scanner(System.in);
+            String ch = scanner.nextLine();
+            switch (ch){
+                case "1":
+                    try {
+                        //String name, String author, Genre genre, Type type, String description, String storage
+                        System.out.println("Enter name of the book");
+                        String name = scanner.nextLine();
+                        System.out.println("Enter author");
+                        String author = scanner.nextLine();
+
+                        Genre genre = checkGenre();
+
+                        Type type = checkType();
+
+                        System.out.println("Enter description of the book");
+                        String description = scanner.nextLine();
+                        System.out.println("Enter storage");
+                        String storage = scanner.nextLine();
+                        addNewBook(name, author, genre, type, description, storage);
+                        sender.sendEmail("New book was added", "Hi, it is a ebook bot. In our library was added new book " + name + " by the author " + name);
+                    } catch (IllegalArgumentException e){
+                        System.out.println("Incorrect input value");
+                    }
+                    break;
+                case "2":
+                    showBooksFormArray(books, "If you want delete recording ");
+                    break;
+                case "3":
+                    showBooksFormArray(books, "If you want modify recording ");
+                    break;
+                case "4":
+                    FetchEmail email = new FetchEmail();
+                    List<Book> booksFromEmailNot = email.fetchEmail();
+                    List<Book> booksFromEmail = new ArrayList<>();
+                    for(Book b:booksFromEmailNot){
+                        if(!books.contains(b)) booksFromEmail.add(b);
+                    }
+                    showBooksFormArray(booksFromEmail, "If you want add books");
+                    break;
+                case "0":
+                    return;
+                default:
+                    System.out.println("You enter not correct val.");
+            }
+            try (FileWriter writerBookToFile = new FileWriter(fileOfBooks, false)){
+                for (Book b:books) {
+                    writerBookToFile.write(b.toString() + "\n");
+                }
+            }catch (IOException e){e.printStackTrace();}
+        }
+    }
+
+//Добавление книги
+    private void addNewBook(String name, String author, Genre genre, Type type, String description, String storage){
+        Book book = new Book(name, author, genre, type, description, storage);
+        addNewBook(book);
+    }
+
+    private void addNewBook(Book book){
+        books.add(book);
+    }
+
+    //Выводит список возможных жанров, и принимает один из них
+    private Genre checkGenre(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Check genre");
+        for (Genre g:Genre.values()){
+            System.out.print(g + ", ");
+        }
+        System.out.println();
+        return Genre.valueOf(scanner.nextLine().trim().toUpperCase());
+    }
+
+    //Выводит список возможных типов книг, и принимает один из них
+    private Type checkType(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Check type");
+        for (Type t:Type.values()){
+            System.out.print(t + ", ");
+        }
+        System.out.println();
+        return Type.valueOf(scanner.nextLine().trim().toUpperCase());
+    }
+
+    private Book[] toMass(List<Book> listOfBook){
+        Book[] massOfBooks = new Book[listOfBook.size()];
+        int i = 0;
+        for(Book b:listOfBook){
+            massOfBooks[i++] = b;
+        }
+        return massOfBooks;
+    }
+}
