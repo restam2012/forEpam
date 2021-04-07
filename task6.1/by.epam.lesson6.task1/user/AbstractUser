@@ -1,0 +1,54 @@
+package by.epam.lesson6.task1.users;
+
+import by.epam.lesson6.task1.book.BaseOfBook;
+import java.util.Scanner;
+
+public abstract class AbstractUser {
+    private String login;
+    private String pass;
+    private boolean isAdmin;
+    private String eMail;
+    BaseOfBook baseOfBook = new BaseOfBook();
+
+    public AbstractUser(String login, String pass, boolean isAdmin, String eMail) {
+        this.login = login;
+        this.pass = pass;
+        this.isAdmin = isAdmin;
+        this.eMail = eMail;
+    }
+
+    public void showMenu(){
+        while (true) {
+            System.out.println("Select action, press:");
+            System.out.println("'1' if you want showBoos");
+            System.out.println("'2' if you want find book");
+            System.out.println("'0' if you want exit");
+            Scanner scanner = new Scanner(System.in);
+            switch (scanner.nextLine().trim()){
+                case "1":
+                    showBooks();
+                    break;
+                case "2":
+                    System.out.println("Enter, what you want to find:");
+                    find(scanner.nextLine().trim());
+                    break;
+                case "0":
+                    return;
+                default:
+                    System.out.println("You enter not correct val");
+            }
+        }
+    }
+
+    void showBooks(){
+        baseOfBook.showBooks();
+    }
+
+    void find(String combination){
+        baseOfBook.find(combination);
+    }
+
+    void modify(){
+        System.out.println("You can't do it.");
+    }
+}
