@@ -1,0 +1,23 @@
+package by.epam.lesson6.task1.key;
+
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import java.io.FileWriter;
+import java.security.SecureRandom;
+import java.util.Base64;
+
+public class FirstInitialisation {
+    public FirstInitialisation() {
+        try(FileWriter fileWriter = new FileWriter("./data/Key.txt")) {
+            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+            SecureRandom secureRandom = new SecureRandom();
+            int keyBitSize = 128;
+            keyGenerator.init(keyBitSize, secureRandom);
+            SecretKey secretKey = keyGenerator.generateKey();
+            String encodedKey = Base64.getEncoder().encodeToString(secretKey.getEncoded());
+            fileWriter.write(encodedKey);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
