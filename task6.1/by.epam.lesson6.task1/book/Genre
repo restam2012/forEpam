@@ -1,0 +1,10 @@
+package by.epam.lesson6.task1.book;
+
+public enum Genre {
+    BUSINESS,
+    FICTION,
+    NON_FICTION,
+    CHILDREN,
+    EDUCATION
+
+}
