@@ -1,0 +1,12 @@
+package by.epam.lesson6.task1.users;
+
+public class User extends AbstractUser {
+    private String login;
+    private String pass;
+    private boolean isAdmin;
+    private String eMail;
+
+    public User(String login, String pass, String eMail) {
+        super(login, pass, false, eMail);
+    }
+}
