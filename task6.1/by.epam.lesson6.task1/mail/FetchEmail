@@ -1,0 +1,71 @@
+package by.epam.lesson6.task1.mail;
+
+import by.epam.lesson6.task1.book.Book;
+import by.epam.lesson6.task1.book.Genre;
+import by.epam.lesson6.task1.book.Type;
+
+import javax.mail.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
+public class FetchEmail {
+    public List<Book> fetchEmail(){
+        List<Book> books = new ArrayList<>();
+
+        Properties props = System.getProperties();
+        props.put("mail.imaps.auth", "true");
+        props.put("mail.imaps.starttls.enable", "true");
+        props.put("mail.imaps.host", "imap.gmail.com");
+        props.put("mail.imaps.port", 993);
+        props.setProperty("mail.store.protocol", "imaps");
+        props.setProperty("mail.imaps.usesocketchannels", "true");
+        String myAccount = "mikalutskiy.ka@gmail.com";
+        String password = "mikalutskiy.ka01";
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(myAccount, password);
+            }
+        });
+        try {
+            Store store = session.getStore("imaps");
+            System.out.println("Start connect to post...");
+            store.connect();
+            Folder folder = store.getFolder("INBOX");
+            folder.open(Folder.READ_ONLY);
+            Message[] messages = folder.getMessages();
+            for (Message m:messages) {
+                if(m.getSubject().toLowerCase().contains("add")) {
+                    String[] book = writePart(m).replaceAll("^\\s*","").split("\\||\n");
+                    if(book.length >= 6){
+                        try {
+                            books.add(new Book(book[0], book[1], Genre.valueOf(book[2]), Type.valueOf(book[3]), book[4], book[5]));
+                        } catch (Exception e){e.printStackTrace();}
+                    }
+                }
+            }
+            folder.close(false);
+            store.close();
+        } catch (Exception e){e.printStackTrace();}
+        return books;
+    }
+
+    private String writePart(Part p) throws Exception {
+         if (p.isMimeType("multipart/*")) {
+            Multipart mp = (Multipart) p.getContent();
+            int count = mp.getCount();
+            for (int i = 0; i < count; i++)
+               return writePart(mp.getBodyPart(i));
+        }
+        else {
+            Object o = p.getContent();
+            if (o instanceof String) {
+                return ((String) o);
+            }
+        }
+        return null;
+    }
+
+}
+
