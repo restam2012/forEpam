@@ -1,0 +1,96 @@
+package by.epam.lesson6.task1.book;
+
+import java.util.Objects;
+
+public class Book {
+    private String name;
+    private String author;
+    private Genre genre;
+    private Type type;
+    private String description;
+    private String storage;
+
+    public Book(String name, String author, Genre genre, Type type, String description, String storage) {
+        this.name = name;
+        this.author = author;
+        this.genre = genre;
+        this.type = type;
+        this.description = description;
+        this.storage = storage;
+    }
+
+    @Override
+    public String toString() {
+        return name + '\t' + author + '\t' + genre + "\t" + type + '\t' + description + '\t' + storage;
+    }
+
+    public String showShortedDescription() {
+        return name + '\t' + author + '\t' + genre + "\t" + type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public Genre getGenre() {
+        return genre;
+    }
+
+    public void setGenre(Genre genre) {
+        this.genre = genre;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getStorage() {
+        return storage;
+    }
+
+    public void setStorage(String storage) {
+        this.storage = storage;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return name.equals(book.name) &&
+                author.equals(book.author) &&
+                genre == book.genre &&
+                type == book.type &&
+                Objects.equals(description, book.description) &&
+                Objects.equals(storage, book.storage);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, author, genre, type, description, storage);
+    }
+}
