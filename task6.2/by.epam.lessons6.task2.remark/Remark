@@ -1,0 +1,46 @@
+package by.epam.lessons6.task2.remark;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+public class Remark {
+    private String topic;
+    private Calendar dateCreate;
+    private String email;
+    private String message;
+
+    public Remark(String topic, Calendar dateCreate, String email, String message) {
+        this.topic = topic;
+        this.dateCreate = dateCreate;
+        this.email = email;
+        this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+
+        return topic + '\t' + df.format(dateCreate.getTime()) + '\t' + email + '\t' + message + '\t';
+    }
+
+    public String toSaveInFile(){
+        return topic + '\t' + dateCreate.getTimeInMillis() + '\t' + email + '\t' + message + '\t';
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public Calendar getDateCreate() {
+        return dateCreate;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+}
