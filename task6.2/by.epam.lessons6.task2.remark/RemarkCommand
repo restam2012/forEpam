@@ -1,0 +1,105 @@
+package by.epam.lessons6.task2.remark;
+
+import java.util.*;
+
+//Класс для универсальных действий над заметками
+public class RemarkCommand {
+
+    //показ всех заметок, переданных на вход
+    public void showRemarks(List<Remark> remarks){
+        //String topic; Date dateCreate; String email; String message;
+        System.out.println("Topic\tDate of create\tE-mail\tMessage");
+        for(Remark r:remarks){
+            System.out.println(r);
+        }
+    }
+
+    //Методы для поиску по любому параметру. Понимаю, что повторы кода не очень, но лучшие идеи в голову не приходят
+    public List<Remark> findInDate(List<Remark> listForFind, Calendar start, Calendar end){
+        List<Remark> listAfterFind = new ArrayList<>();
+        for(Remark r:listForFind){
+            if(r.getDateCreate().after(start) && r.getDateCreate().before(end)){
+                listAfterFind.add(r);
+            }
+        }
+        return listAfterFind;
+    }
+
+    public List<Remark> findInTopic(List<Remark> listForFind, String topic){
+        List<Remark> listAfterFind = new ArrayList<>();
+        for(Remark r:listForFind){
+            if(r.getTopic().matches(topic)){
+                listAfterFind.add(r);
+            }
+        }
+        return listAfterFind;
+    }
+
+    public List<Remark> findInEmail(List<Remark> listForFind, String email){
+        List<Remark> listAfterFind = new ArrayList<>();
+        for(Remark r:listForFind){
+            if(r.getEmail().matches(email)){
+                listAfterFind.add(r);
+            }
+        }
+        return listAfterFind;
+    }
+
+    public List<Remark> findInMessage(List<Remark> listForFind, String message){
+        List<Remark> listAfterFind = new ArrayList<>();
+        for(Remark r:listForFind){
+            if(r.getMessage().matches(message)){
+                listAfterFind.add(r);
+            }
+        }
+        return listAfterFind;
+    }
+
+    //Поиск по строке в любом поле, по типу ctrl + f
+    public List<Remark> find(List<Remark> listForFind, String str){
+        List<Remark> listAfterFind = new ArrayList<>();
+        for(Remark r:listForFind){
+            if(r.toString().matches(".*" + str + ".*")){
+                listAfterFind.add(r);
+            }
+        }
+        return listAfterFind;
+    }
+
+    //Методы по сортировке по любому параметру
+    public void sortByTopic(List<Remark> list){
+        list.sort(new Comparator<Remark>() {
+            @Override
+            public int compare(Remark o1, Remark o2) {
+                return o1.getTopic().compareTo(o2.getTopic());
+            }
+        });
+    }
+
+    public void sortByDate(List<Remark> list){
+        list.sort(new Comparator<Remark>() {
+            @Override
+            public int compare(Remark o1, Remark o2) {
+                return o1.getDateCreate().compareTo(o2.getDateCreate());
+            }
+        });
+    }
+
+    public void sortByEmail(List<Remark> list){
+        list.sort(new Comparator<Remark>() {
+            @Override
+            public int compare(Remark o1, Remark o2) {
+                return o1.getEmail().compareTo(o2.getEmail());
+            }
+        });
+    }
+
+    public void sortByMessage(List<Remark> list){
+        list.sort(new Comparator<Remark>() {
+            @Override
+            public int compare(Remark o1, Remark o2) {
+                return o1.getMessage().compareTo(o2.getMessage());
+            }
+        });
+    }
+}
