@@ -1,0 +1,239 @@
+package by.epam.lessons6.task2;
+
+import by.epam.lessons6.task2.remark.Remark;
+import by.epam.lessons6.task2.remark.RemarkCommand;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Notepad {
+    File fileOfRemark = new File("./Data/Remark.txt");
+    List<Remark> remarks = new ArrayList<>();
+    Scanner readFromCommandLine = new Scanner(System.in);
+    RemarkCommand remarkCommand = new RemarkCommand();
+
+    {
+        if (fileOfRemark.exists() && fileOfRemark.length() > 0) {
+            try (FileReader readRemark = new FileReader(fileOfRemark)) {
+                Scanner scanner = new Scanner(readRemark);
+                while (scanner.hasNext()) {
+                    String[] toRemark = scanner.nextLine().split("\t");
+                    Calendar date = new GregorianCalendar();
+                    date.setTimeInMillis(Long.parseLong(toRemark[1]));
+                    remarks.add(new Remark(toRemark[0], date, toRemark[2], toRemark[3]));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void menu() {
+        try {
+            while (true) {
+                System.out.println("Select action:");
+                System.out.println("1. Add new remark");
+                System.out.println("2. Show remark");
+                System.out.println("3. Find remark");
+                System.out.println("0. Exit");
+
+                switch (readFromCommandLine.nextLine().trim()) {
+                    case "1":
+                        addNewRemark();
+                        break;
+                    case "2":
+                        //String topic; Date dateCreate; String email; String message;
+                        remarkCommand.showRemarks(remarks);
+                        while (sorting(remarks)) {
+                            remarkCommand.showRemarks(remarks);
+                        }
+                        break;
+                    case "3":
+                        findRemark(remarks);
+                        break;
+                    case "0":
+                        return;
+                    default:
+                        System.out.println("You enter not correct val");
+                }
+            }
+        } catch (Exception e){e.printStackTrace();}
+        finally {
+            try (FileWriter writerRemark = new FileWriter(fileOfRemark, false)){
+                for (Remark r:remarks){
+                    writerRemark.write(r.toSaveInFile() + "\n");
+                }
+            } catch (Exception e){e.printStackTrace();}
+        }
+    }
+
+
+    private void addNewRemark() {
+        System.out.println("Enter topic:");
+        String topic = readFromCommandLine.nextLine();
+        String email;
+        while (true) {
+            System.out.println("Enter email:");
+            email = readFromCommandLine.nextLine();
+            if(!checkEmail(email)) System.out.println("You enter not correct email");
+            else break;
+        }
+        System.out.println("Enter message:");
+        String message = readFromCommandLine.nextLine();
+        remarks.add(new Remark(topic, new GregorianCalendar(), email, message));
+        System.out.println("Remark added successful");
+    }
+
+    private boolean sorting(List<Remark> remarkList) {
+        System.out.println("Enter '1' if you want sort by topic, '2' - by date of crate remark, '3' - by email, '4' - by message. '0' - to exit");
+        switch (readFromCommandLine.nextLine().trim()) {
+            case "1":
+                remarkCommand.sortByTopic(remarkList);
+                break;
+            case "2":
+                remarkCommand.sortByDate(remarkList);
+                break;
+            case "3":
+                remarkCommand.sortByEmail(remarkList);
+                break;
+            case "4":
+                remarkCommand.sortByMessage(remarkList);
+                break;
+            case "0":
+                return false;
+            default:
+                System.out.println("You enter not correct val");
+        }
+        return true;
+    }
+
+    private boolean findRemark(List<Remark> remarkList){
+        System.out.println("Select type of find:");
+        System.out.println("'1' - simple find in all text ");
+        System.out.println("'2' - find by topic");
+        System.out.println("'3' - find by date of create");
+        System.out.println("'4' - find by e-mail");
+        System.out.println("'5' - find by message");
+        System.out.println("'0' - to exit");
+        System.out.println("You can find by group of params. Enter num (exclude 1 and 0) with comma(,) e.g 2,3");
+        List<Remark> findList = new ArrayList<>(remarkList);
+
+        String selected = readFromCommandLine.nextLine().trim();
+
+        if(Pattern.compile("1").matcher(selected).find()){
+            System.out.println("Enter word to find");
+            String str = readFromCommandLine.nextLine();
+            findList = remarkCommand.find(remarkList, str);
+        }
+        else if(Pattern.compile("0").matcher(selected).find()){
+            return false;
+        }
+        else {
+            if(Pattern.compile("2").matcher(selected).find()){
+                findList = findByTopic(findList);
+            }
+            if(Pattern.compile("3").matcher(selected).find()){
+                findList = findByDate(findList);
+            }
+            if(Pattern.compile("4").matcher(selected).find()){
+                findList = findByEmail(findList);
+            }
+            if(Pattern.compile("5").matcher(selected).find()){
+                findList = findByMessage(findList);
+            }
+        }
+        remarkCommand.showRemarks(findList);
+        while (sorting(findList)){
+            remarkCommand.showRemarks(findList);
+        }
+        return true;
+    }
+
+    private Calendar parseStringToCalendar(String str, boolean ifStart){
+        Calendar day = new GregorianCalendar();
+        if(ifStart && str.matches("null")) {
+            day.setTimeInMillis(Long.MIN_VALUE);
+        }
+        else if(str.matches("null")){
+            day.setTimeInMillis(Long.MAX_VALUE);
+        }
+        else {
+            String[] date = str.split("\\.");
+            //Почему-то месяц с 0 до 11, поэтому убираем 1
+            day.set(Integer.parseInt(date[2]), (Integer.parseInt(date[1]) - 1), Integer.parseInt(date[0]), 0, 0, 0);
+        }
+        return day;
+    }
+
+    private List<Remark> findByTopic(List<Remark> remarkList){
+        System.out.println("Enter topic");
+        return remarkCommand.findInTopic(remarkList, readFromCommandLine.nextLine());
+    }
+
+    private List<Remark> findByDate(List<Remark> remarkList){
+        String strOfDataStart, strOfDataEnd;
+        do {
+            System.out.println("Enter day.month.year (e.g. 01.01.2021) of start find, or null");
+            strOfDataStart = readFromCommandLine.nextLine().trim();
+        } while (checkDate(strOfDataStart));
+        Calendar dateOfStart = parseStringToCalendar(strOfDataStart, true);
+        do {
+            System.out.println("Enter day.month.year (e.g. 01.01.2021) of end find, or null");
+            strOfDataEnd = readFromCommandLine.nextLine().trim();
+        } while (checkDate(strOfDataEnd));
+        Calendar dateOfEnd = parseStringToCalendar(strOfDataEnd, false);
+        return remarkCommand.findInDate(remarkList, dateOfStart, dateOfEnd);
+    }
+
+    private List<Remark> findByEmail(List<Remark> remarkList){
+        System.out.println("Enter e-mail");
+        return remarkCommand.findInEmail(remarkList, readFromCommandLine.nextLine());
+    }
+
+    private List<Remark> findByMessage(List<Remark> remarkList){
+        System.out.println("Enter message");
+        return remarkCommand.findInMessage(remarkList, readFromCommandLine.nextLine());
+    }
+
+    private boolean checkDate(String date){
+        Pattern pattern = Pattern.compile("\\d{2}\\.\\d{2}\\.\\d{4}");
+        Matcher matcher = pattern.matcher(date);
+        if(matcher.find() || date.matches("null")) return false;
+        else {
+            System.out.println("You enter not correct string");
+            return true;
+        }
+    }
+
+    private boolean checkEmail(String email){
+        /*Из вики
+        * Local-part
+The local-part of the email address may be unquoted or may be enclosed in quotation marks.
+
+If unquoted, it may use any of these ASCII characters:
+
+uppercase and lowercase Latin letters A to Z and a to z
+digits 0 to 9
+printable characters !#$%&'*+-/=?^_`{|}~
+dot ., provided that it is not the first or last character and provided also that it does not appear consecutively
+*
+* he domain name part of an email address has to conform to strict guidelines: it must match the requirements for a hostname, a list of dot-separated DNS labels, each label being limited to a length of 63 characters and consisting of:[5]:§2
+
+uppercase and lowercase Latin letters A to Z and a to z;
+digits 0 to 9, provided that top-level domain names are not all-numeric;
+hyphen -, provided that it is not the first or last character*
+
+Про домент не полностью расписано. Предположу, что последняя часть должна состоять из .[буквы или цифры]/
+         */
+
+        if(email.matches("[\\w\\!#$%&'\\*\\+\\-/=\\?\\^`\\{\\|\\}~][\\w\\!#$%&'\\*\\+\\-/=\\?\\^`\\{\\|\\}~\\.]*[\\w\\!#$%&'\\*\\+\\-/=\\?\\^`\\{\\|\\}~]@[\\w][\\w-]*[\\w]\\.[\\w]*")){
+            return true;
+        }
+        return false;
+    }
+}
