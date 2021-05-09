@@ -1,0 +1,85 @@
+package by.epam.lesson6.task3.user;
+
+import by.epam.lesson6.task3.cases.CaseCommands;
+import by.epam.lesson6.task3.xml.XmlReader;
+import by.epam.lesson6.task3.xml.XmlWriter;
+
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class UserCreator {
+
+    public AbstractUsers logIn(String login, String password){
+        XmlReader xmlReader = new XmlReader();
+        return xmlReader.xmlReaderUser(login, password);
+    }
+
+    //Создание пользователя через главное меню. Может быть только группы пользователь. Пользователя группы админ можно создать только из меню админа.
+    public AbstractUsers signIn(PrintWriter out, Scanner in){
+        AbstractUsers user = null;
+        while (user == null){
+            out.println("Enter login or '0' if you want exit:");
+            String login = in.nextLine().trim();
+            if(login.equals("0")) return null;
+            out.println("Enter password:");
+            String pass = in.nextLine();
+            user = addNewUser(login, pass, false);
+        }
+        return user;
+    }
+
+    //Создание пользователя. Медот вызывается пользователем группы администратор.
+    public void addNewUser(PrintWriter out, Scanner in){
+        AbstractUsers user = null;
+        CaseCommands commands = new CaseCommands();
+        while (user == null){
+            out.println("Enter login or '0' if you want exit:");
+            String login = in.nextLine().trim();
+            if(login.equals("0")) return;
+            out.println("Enter password:");
+            String pass = in.nextLine();
+            boolean isAdmin = commands.toCheckBoolean("Do you want add admin?", out, in);
+            user = addNewUser(login, pass, isAdmin);
+        }
+    }
+
+    //Создание первого пользователя
+    public void addFirstUser(PrintWriter out, Scanner in){
+        AbstractUsers user = null;
+        while (user == null){
+            out.println("Enter login or '0' if you want exit:");
+            String login = in.nextLine().trim();
+            if(login.equals("0")) return;
+            out.println("Enter password:");
+            String pass = in.nextLine();
+            user = new Admin(login, pass);
+            List<AbstractUsers> users = new ArrayList<>();
+            users.add(user);
+            XmlWriter writer = new XmlWriter();
+            writer.xmlWriterUsers(users);
+        }
+    }
+
+
+    private AbstractUsers addNewUser(String login, String pass, boolean isAdmin){
+        XmlReader reader = new XmlReader();
+        List<AbstractUsers> users = reader.readListOfUsers();
+        AbstractUsers myUser;
+
+        //Проверка, что данный логин свободен
+        for(AbstractUsers user:users){
+            if(user.getName().equals(login)) return null;
+        }
+        if(isAdmin){
+            myUser = new Admin(login, pass);
+        }
+        else myUser = new User(login, pass);
+
+        users.add(myUser);
+        XmlWriter writer = new XmlWriter();
+        writer.xmlWriterUsers(users);
+        return myUser;
+    }
+}
