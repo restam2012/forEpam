@@ -1,0 +1,25 @@
+package by.epam.lesson6.task3;
+
+import java.io.*;
+import java.net.Socket;
+import java.util.Scanner;
+
+public class Client {
+
+    public static void main(String[] args) {
+        try (Socket clientSocket = new Socket("localhost", 4004);
+             PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream())), true);
+             Scanner in = new Scanner(clientSocket.getInputStream());
+             Scanner scanner = new Scanner(System.in)){
+
+            out.println("Hi");
+            String line = in.nextLine();
+            System.out.println(line);
+            while (!line.equals("Bye!")){
+                out.println(scanner.nextLine());
+                line = in.nextLine().replaceAll("\\|", "\n");
+                System.out.println(line);
+            }
+        } catch (IOException e){e.printStackTrace();}
+    }
+}
