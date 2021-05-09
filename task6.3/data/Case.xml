@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Cases>
+    <case>
+        <name>Микалуцкий Кирилл Анатольевич</name>
+        <faculty>ФИТУ</faculty>
+        <location>Островец</location>
+        <isHostel>true</isHostel>
+        <isBudge>true</isBudge>
+        <averageGrade>8.8</averageGrade>
+        <comment>Want to work in epam</comment>
+        <privileges/>
+    </case>
+</Cases>
