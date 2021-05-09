@@ -1,0 +1,5 @@
+package by.epam.lesson6.task3.cases;
+
+public enum Privileges {
+    ORPHAN, DISABLED, CHERNOBYL, PREGNANT, PENNILESS
+}
