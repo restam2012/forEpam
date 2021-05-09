@@ -1,0 +1,273 @@
+package by.epam.lesson6.task3.cases;
+
+import by.epam.lesson6.task3.xml.XmlReader;
+import by.epam.lesson6.task3.xml.XmlWriter;
+
+import java.io.PrintWriter;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class CaseCommands {
+    List<Case> myCases;
+    {
+        XmlReader reader = new XmlReader();
+        myCases = reader.xmlReaderCase();
+        myCases = myCases == null ? new ArrayList<>() : myCases;
+    }
+    public void showCase(PrintWriter out, Scanner in){
+        if(myCases == null) out.print("The list of cases is empty||");
+        else showCaseFromArray(out, myCases);
+    }
+
+    private void showCaseFromArray(PrintWriter out, List<Case> cases){
+        int i = 1;
+        for (Case c:cases) {
+            out.print(i++ + "\t" + c.toString() + "|");
+        }
+        out.print("|");
+    }
+
+
+    //String name; String faculty; String location; boolean isHostel; boolean isBudget; double averageGrade; String comment; List<Privileges> privileges;
+    public void addCase(PrintWriter out, Scanner in){
+        boolean check = false;
+
+        //Name
+        String name = "";
+        while (!check){
+            out.println("Enter full name of student:");
+            name = in.nextLine();
+            check = checkName(name);
+        }
+        check = false;
+
+        //Faculty
+        String faculty = null;
+        while (!check) {
+            out.println("Enter faculty of student:");
+            faculty = in.nextLine();
+            check = checkForEmpty(name);
+        }
+        check = false;
+        //Location
+        String location = null;
+        while (!check) {
+            out.println("Enter location of student:");
+            location = in.nextLine();
+            check = checkForEmpty(location);
+        }
+        //Hostel
+        boolean hostel = toCheckBoolean("Does the student live in a hostel?", out, in);
+
+        //Budget
+        boolean budget = toCheckBoolean("Does the student study in budget?", out, in);
+
+        //Average grade
+        double grade = -1;
+        while (grade == -1){
+            out.println("Enter average grade of student:");
+            grade = checkGrade(in.nextLine(), out);
+        }
+
+        //Comment
+        out.println("Enter comment about the student:");
+        String comment = in.nextLine();
+
+        //Privileges
+        out.print("Select student privileges from the list. Divide privileges by comma. If student hasn't privileges, enter empty line.|");
+        out.println(listOfPrivileges());
+        Set<Privileges> privileges = checkPrivileges(in.nextLine());
+        try {
+            myCases.add(new Case(name, faculty, location, hostel, budget, grade, comment, privileges));
+            out.print("The case was successful added.|");
+            new XmlWriter().xmlWriterCase(myCases);
+        } catch (Exception e){
+            e.printStackTrace();
+            out.print("There were problems adding case.|");}
+    }
+
+    private boolean checkName(String name){
+        Pattern pattern = Pattern.compile("[A-Za-zА-яа-я]+ [A-Za-zА-яа-я]+ *[A-Za-zА-яа-я]*");
+        Matcher matcher = pattern.matcher(name);
+        return matcher.matches();
+    }
+
+    private double checkGrade(String grade, PrintWriter out){
+        try {
+            grade.replaceAll(",", ".");
+            if(Double.valueOf(grade) < 0 || Double.valueOf(grade) > 10) throw new Exception();
+            return Double.valueOf(grade);
+        } catch (Exception e){
+            out.print("You enter not correct number.|");
+            return -1;
+        }
+    }
+
+    private boolean checkForEmpty(String name){
+        Pattern pattern = Pattern.compile(".+");
+        Matcher matcher = pattern.matcher(name);
+        return matcher.matches();
+    }
+
+    private Set<Privileges> checkPrivileges(String line){
+        Set<Privileges> privileges = new TreeSet<>();
+        if(line != null) {
+            String[] privilege = line.split(",");
+            for (String p:privilege) {
+                try {
+                    privileges.add(Privileges.valueOf(p.trim().toUpperCase()));
+                }catch (Exception e){}
+            }
+        }
+        return privileges;
+    }
+
+    private String listOfPrivileges(){
+        return Arrays.toString(Privileges.values());
+    }
+
+    //Универсальный метод добавления булевой переменной. В topic указываем текст, который будет описывать, что за переменную мы добавляем.
+    // Данный метод автоматически проверяет, введено yes или no. Если не данные значения просит ввести еще раз.
+    public boolean toCheckBoolean(String topic, PrintWriter out, Scanner in){
+        String line = "";
+        boolean check = false;
+        while (!check) {
+            out.println(topic + " Enter 'yes' or 'no:");
+            line = in.nextLine();
+            check = isConsent(line);
+            if(!check) out.print("Not correct answer.|");
+        }
+        return valueConsent(line);
+    }
+
+    private boolean isConsent(String consent){
+        Pattern pattern = Pattern.compile("(yes)|(no)");
+        Matcher matcher = pattern.matcher(consent.trim().toLowerCase());
+        return matcher.matches();
+    }
+
+    private boolean valueConsent(String consent){
+        if(consent.equals("yes")) return true;
+        else return false;
+    }
+
+    public void modify(PrintWriter out, Scanner in){
+        showCase(out, in);
+        boolean correct = false;
+        int line = -1;
+        while (!correct) {
+            out.println("Enter number of line, which you want to modify");
+            String numOfLine = in.nextLine().trim();
+            Pattern pattern = Pattern.compile("\\d+");
+            Matcher matcher = pattern.matcher(numOfLine);
+            correct = matcher.matches();
+            if(correct) {
+                try {
+                    line = Integer.valueOf(numOfLine);
+                    if(line > myCases.size() && line <= 0) correct = false;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    correct = false;
+                }
+            }
+        }
+        Case selectCase = myCases.get(line - 1);
+        //String name; String faculty; String location; boolean isHostel; boolean isBudget; double averageGrade; String comment; List<Privileges> privileges;
+        out.println("What want you modify? Enter:|1. Name|2. Faculty|3. Location|4. Hostel|5. Budget|6. Average grade|7. Comment|8. Privileges");
+        endSwitch:switch (in.nextLine().trim()){
+            case "1":
+                //Изменение ФИО
+                while (true) {
+                    out.println("Enter new full name, or enter 'q' if you want exit:");
+                    String name = in.nextLine();
+                    if(name.equals("q")) break;
+                    if(name != null && checkName(name)){
+                        selectCase.setName(name);
+                        break;
+                    }
+                    else out.print("Not correct name|");
+                }
+                break;
+                //Изменение факультета.
+            case "2":
+                out.println("Enter new faculty, or enter 'q' if you want exit:");
+                String faculty = in.nextLine();
+                if(!faculty.equals("q") && checkForEmpty(faculty)) selectCase.setFaculty(faculty);
+                break;
+                //Изменение места жительства
+            case "3":
+                out.println("Enter new location, or enter 'q' if you want exit:");
+                String location = in.nextLine();
+                if(!location.equals("q") && checkForEmpty(location)) selectCase.setLocation(location);
+                break;
+                //Редактирование данных о проживании в общежитии
+            case "4":
+                boolean hostel = toCheckBoolean("Does the student live in a hostel?", out, in);
+                selectCase.setHostel(hostel);
+                break;
+            //Редактирование данных об учебе на бюджете
+            case "5":
+                boolean budget = toCheckBoolean("Does the student study in budget?", out, in);
+                selectCase.setBudget(budget);
+                break;
+                //Редактирование данных о среднем балле
+            case "6":
+                double grade = -1;
+                while (grade == -1){
+                    out.println("Enter average grable of student or enter 'q' to exit:");
+                    String str = in.nextLine().trim();
+                    if(str != "q"){
+                        grade = checkGrade(str, out);
+                    }
+                    else break endSwitch;
+                }
+                selectCase.setAverageGrade(grade);
+                break;
+                //Редактирование комментария о студенте
+            case "7":
+                out.println("Enter new comment, or enter 'q' to exit:");
+                String comment = in.nextLine();
+                if(!comment.equals("q")) selectCase.setComment(comment);
+                break;
+                //Редактирование списка льгот
+            case "8":
+                Set<Privileges> newPrivileges = modifyPrivileges(selectCase.getPrivileges(), out, in);
+                selectCase.setPrivileges(newPrivileges);
+                break;
+        }
+        new XmlWriter().xmlWriterCase(myCases);
+    }
+
+    private Set<Privileges> modifyPrivileges(Set<Privileges> privileges, PrintWriter out, Scanner in) {
+        String line;
+        while (true) {
+            out.print("The privileges is:|");
+            int i = 1;
+            for (Privileges p : privileges) {
+                out.print(i + " " + p + "|");
+            }
+            out.println("What you want to do? Enter '1' if you want to add new privileges or '2' if you want to delete one of this privileges. Enter '0' if you want to exit");
+            switch (in.nextLine().trim()){
+                case "1":
+                    out.print("Select student privileges from the list. Divide privileges by comma. If you want to exit, enter 'q'.|");
+                    out.println(listOfPrivileges());
+                    line = in.nextLine();
+                    if(line.equals("q")) return privileges;
+                    privileges.addAll(checkPrivileges(line));
+                    break;
+                case "2":
+                    out.println("Enter number of privileges to delete. If you want to exit, enter 'q'.|");
+                    line = in.nextLine();
+                    if(line.equals("q")) return privileges;
+                    if(line.matches("\\d") && Integer.parseInt(line) <= privileges.size() && Integer.parseInt(line) > 0){
+                        ArrayList<Privileges> arrayPrivileges = new ArrayList<>(privileges);
+                        privileges.remove(arrayPrivileges.get(Integer.parseInt(line) - 1));
+                    }
+                    break;
+                case "0":
+                    return privileges;
+            }
+        }
+    }
+}
