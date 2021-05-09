@@ -1,0 +1,96 @@
+package by.epam.lesson6.task3.cases;
+
+import java.util.List;
+import java.util.Set;
+
+public class Case {
+    String name;
+    String faculty;
+    String location;
+    boolean isHostel;
+    boolean isBudget;
+    double averageGrade;
+    String comment;
+    Set<Privileges> privileges;
+
+    public Case(String name, String faculty, String location, boolean isHostel, boolean isBudget, double averageGrade, String comment, Set<Privileges> privileges) {
+        this.name = name;
+        this.faculty = faculty;
+        this.location = location;
+        this.isHostel = isHostel;
+        this.isBudget = isBudget;
+        this.averageGrade = averageGrade;
+        this.comment = comment;
+        this.privileges = privileges;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getFaculty() {
+        return faculty;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public boolean isHostel() {
+        return isHostel;
+    }
+
+    public boolean isBudget() {
+        return isBudget;
+    }
+
+    public double getAverageGrade() {
+        return averageGrade;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public Set<Privileges> getPrivileges() {
+        return privileges;
+    }
+
+    @Override
+    public String toString() {
+        return name + '\t' + faculty + '\t' + location + '\t' + isHostel + '\t' + isBudget + '\t' + averageGrade +
+                '\t' + comment + '\t' + privileges;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setFaculty(String faculty) {
+        this.faculty = faculty;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setHostel(boolean hostel) {
+        isHostel = hostel;
+    }
+
+    public void setBudget(boolean budget) {
+        isBudget = budget;
+    }
+
+    public void setAverageGrade(double averageGrade) {
+        this.averageGrade = averageGrade;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public void setPrivileges(Set<Privileges> privileges) {
+        this.privileges = privileges;
+    }
+}
