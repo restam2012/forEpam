@@ -1,0 +1,82 @@
+package by.epam.lesson6.task3;
+
+import by.epam.lesson6.task3.user.AbstractUsers;
+import by.epam.lesson6.task3.user.UserCreator;
+import by.epam.lesson6.task3.xml.XmlReader;
+
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Scanner;
+
+public class Server {
+
+    public static void main(String[] args) {
+        //Для того, что бы сервер постоянно ждал соединения пришлось делать такую конструкцию, иначе после первого же
+        //отвала сокет не открывался.
+        while (true) {
+            try (ServerSocket serverSocket = new ServerSocket(4004); Socket socket = serverSocket.accept()) {
+                while (!socket.isClosed()) {
+                    try (PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+                         Scanner in = new Scanner(socket.getInputStream())){
+
+                        String command = in.nextLine();
+                        if (command.equals("Hi")) {
+                            startMenu(out, in);
+                        } else System.out.println("No");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static void startMenu(PrintWriter out, Scanner in){
+        while (true) {
+            File userFile = new File("./data/User.xml");
+            if(!userFile.exists() || userFile.length() == 0){
+                XmlReader xmlReader = new XmlReader();
+                xmlReader.createFirstUser(out, in);
+            }
+
+            out.println("Please, press 1 if you want log in or 2 if you want sing in. Press 0 if you want exit");
+            String command = in.nextLine().trim();
+
+            if (command.equals("0")){
+                out.println("Bye!");
+                break;
+            }
+            else if (command.equals("1")){
+                logout(out, in);
+            }
+            else if (command.equals("2")){
+                UserCreator creator = new UserCreator();
+                AbstractUsers user = creator.signIn(out, in);
+                if(user != null) {
+                    user.showMenu(out, in);
+                }
+            }
+        }
+    }
+
+    private static void logout(PrintWriter out, Scanner in){
+        AbstractUsers user = null;
+        UserCreator userCreator = new UserCreator();
+        while (user == null) {
+            out.println("Enter your login. If you want exit from log in menu, press 'q'");
+            String login = in.nextLine();
+            if(login.equals("q")) break;
+            out.println("Enter your password:");
+            String pass = in.nextLine();
+            user = userCreator.logIn(login, pass);
+            if(user != null) {
+                user.showMenu(out, in);
+            }
+            else out.print("Your login or pass is wrong.|");
+        }
+    }
+}
