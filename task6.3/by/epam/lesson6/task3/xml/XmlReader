@@ -1,0 +1,117 @@
+package by.epam.lesson6.task3.xml;
+
+import by.epam.lesson6.task3.cases.Case;
+import by.epam.lesson6.task3.cases.Privileges;
+import by.epam.lesson6.task3.user.AbstractUsers;
+import by.epam.lesson6.task3.user.Admin;
+import by.epam.lesson6.task3.user.User;
+import by.epam.lesson6.task3.user.UserCreator;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.*;
+
+public class XmlReader {
+
+    public void createFirstUser(PrintWriter out, Scanner in) {
+        UserCreator creator = new UserCreator();
+        out.print("In base not find any users. Please, enter first user (it mast be administrator). | ");
+        creator.addFirstUser(out, in);
+    }
+
+    public AbstractUsers xmlReaderUser(String login, String password){
+        List<AbstractUsers> abstractUsersList = readListOfUsers();
+        for(AbstractUsers abstractUsers : abstractUsersList) {
+            if (abstractUsers != null && abstractUsers.getName().equals(login)) {
+                if (abstractUsers.getPassword().equals(password)) return abstractUsers;
+                else return null;
+            }
+        }
+        return null;
+    }
+
+    public List<AbstractUsers> readListOfUsers(){
+        List<AbstractUsers> abstractUsersList = new ArrayList<>();
+        File fileUsers = new File("./data/User.xml");
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(fileUsers);
+            document.getDocumentElement().normalize();
+            NodeList nodeList = document.getElementsByTagName("user");
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                abstractUsersList.add(getNodeUser(nodeList.item(i)));
+            }
+        } catch (Exception e){e.printStackTrace();}
+        return abstractUsersList;
+    }
+
+    private AbstractUsers getNodeUser(Node node){
+        if(node.getNodeType() == Node.ELEMENT_NODE){
+            Element element = (Element) node;
+            if(Boolean.valueOf(getTagValue("isAdmin", element))) {
+                return new Admin(getTagValue("name", element), getTagValue("password", element));
+            }
+            else return new User(getTagValue("name", element), getTagValue("password", element));
+        }
+        return null;
+    }
+
+    public List<Case> xmlReaderCase(){
+        File casesFile = new File("./data/Case.xml");
+        List<Case> cases = new ArrayList<>();
+        if(casesFile.exists()) {
+            try {
+                DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = documentBuilderFactory.newDocumentBuilder();
+                Document document = builder.parse(casesFile);
+                document.getDocumentElement().normalize();
+                NodeList nodeList = document.getElementsByTagName("case");
+                for (int i = 0; i < nodeList.getLength(); i++) {
+                    Case c = getNodeCase(nodeList.item(i));
+                    if (c != null) cases.add(c);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return cases;
+        }
+        else return null;
+    }
+
+    private Case getNodeCase(Node node){
+        if(node.getNodeType() == Node.ELEMENT_NODE){
+            Element element = (Element) node;
+
+            return new Case(getTagValue("name", element), getTagValue("faculty", element), getTagValue("location", element),
+                    Boolean.valueOf(getTagValue("isHostel", element)), Boolean.valueOf(getTagValue("isBudge", element)),
+                    Double.valueOf(getTagValue("averageGrade", element)), getTagValue("comment", element),
+                    getNodePrivileges(element.getElementsByTagName("privileges").item(0).getChildNodes()));
+        }
+        return null;
+    }
+
+    private Set<Privileges> getNodePrivileges(NodeList node){
+        Set<Privileges> privileges = new TreeSet<>();
+        for (int i = 0; i < node.getLength(); i++) {
+            if(node.item(i).getNodeType() == Element.ELEMENT_NODE) {
+                privileges.add(Privileges.valueOf(node.item(i).getFirstChild().getNodeValue()));
+            }
+        }
+        return privileges;
+    }
+
+    private String getTagValue(String tag, Element element){
+        NodeList nodeList = element.getElementsByTagName(tag).item(0).getChildNodes();
+        Node node = (Node) nodeList.item(0);
+        try {
+            return node.getNodeValue();
+        } catch (NullPointerException e){return "";}
+    }
+}
