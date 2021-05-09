@@ -1,0 +1,45 @@
+package by.epam.lesson6.task3.user;
+
+import by.epam.lesson6.task3.cases.CaseCommands;
+
+import java.io.PrintWriter;
+import java.util.Scanner;
+
+public class Admin extends AbstractUsers {
+    public Admin(String name, String password) {
+        super(name, password, true);
+    }
+
+    public void showMenu(PrintWriter out, Scanner in) {
+        CaseCommands commands = new CaseCommands();
+
+        while (true) {
+            out.print("Select action:|");
+            out.print("1. Show cases|");
+            out.print("2. Add new case|");
+            out.print("3. Modify case|");
+            out.print("4. Add new user or admin|");
+            out.println("0. To exit");
+            switch (in.nextLine().trim()) {
+                case "1":
+                    commands.showCase(out, in);
+                    break;
+                case "2":
+                    commands.addCase(out, in);
+                    break;
+                case "3":
+                    commands.modify(out, in);
+                    break;
+                case "4":
+                    UserCreator creator = new UserCreator();
+                    creator.addNewUser(out, in);
+                    break;
+                case "0":
+                    return;
+                default:
+                    out.print("Not correct enter|");
+            }
+        }
+    }
+}
+
