@@ -1,0 +1,27 @@
+public class Ship {
+    private boolean isEmpty;
+    private int weight;
+    private Repository repository;
+
+    public Ship(boolean isEmpty, int weight, Repository repository) {
+        this.isEmpty = isEmpty;
+        this.weight = weight;
+        this.repository = repository;
+    }
+//Предполагается, что если корабль пустой, то в начале груз резервируется,после чего будет погрузка пропорционально размеру корабля
+    //Если корабль с грузом, то в начале разгружается, а потом груз добавляется в список доступного
+    public void charge(){
+        if(isEmpty){
+            repository.action(weight, false);
+            try {
+                Thread.sleep(weight);
+            } catch (InterruptedException e){e.printStackTrace();}
+        }
+        else {
+            try {
+                Thread.sleep(weight);
+            } catch (InterruptedException e){e.printStackTrace();}
+            repository.action(weight, true);
+        }
+    }
+}
