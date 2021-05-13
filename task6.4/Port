@@ -1,0 +1,35 @@
+import java.util.Random;
+
+public class Port{
+    private int maxWeightRepository;
+    private int maxWeightShip;
+    private int weightRepository;
+    private int capacity;
+    private Repository repository;
+
+    public Port(int maxWeightRepository, int maxWeightShip, int weightRepository, int capacity) {
+        this.maxWeightRepository = maxWeightRepository;
+        this.maxWeightShip = maxWeightShip;
+        this.weightRepository = weightRepository;
+        this.capacity = capacity;
+        repository = new Repository(weightRepository,maxWeightRepository);
+    }
+
+    public Port() {
+        this(100_000, 10_000, 95_000, 5);
+    }
+
+    public void startCharge(){
+        Dock[] docks = new Dock[capacity];
+        for (int i = 0; i < docks.length; i++) {
+            docks[i] = new Dock(repository, maxWeightShip);
+        }
+        while (true){
+            for(int i = 0; i < docks.length; i++){
+                if(!docks[i].thread.isAlive()){
+                    docks[i] = new Dock(repository, maxWeightShip);
+                }
+            }
+        }
+    }
+}
