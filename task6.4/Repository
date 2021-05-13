@@ -1,0 +1,41 @@
+public class Repository {
+    private int weight;
+    private int maxWeight;
+
+
+    public Repository(int weight, int maxWeight) {
+        this.weight = weight;
+        this.maxWeight = maxWeight;
+    }
+
+    synchronized void action(int w, boolean add){
+        if(add) add(w);
+        else sub(w);
+    }
+
+    //Выгрузить груз на склад
+    public void add(int w){
+        int newWeight = weight + w;
+        if(newWeight > maxWeight){
+            System.out.println("In ship stand " + (newWeight - maxWeight) + " weight. Repository is full.");
+            weight = maxWeight;
+        }
+        else {
+            weight = newWeight;
+            System.out.println("The repository successful charge for " + w + "weight. Total count of weight is " + weight);
+        }
+    }
+
+    //
+    public void sub(int w){
+        int newWeight = weight - w;
+        if(newWeight < 0){
+            System.out.println("By ship was charge " + weight + " weight. Repository is empty.");
+            weight = 0;
+        }
+        else {
+            weight = newWeight;
+            System.out.println("The ship successful charge for " + w + "weight. Total count of weight is " + weight);
+        }
+    }
+}
