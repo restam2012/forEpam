@@ -1,0 +1,23 @@
+import java.util.Random;
+
+public class Dock implements Runnable{
+
+    private Repository repository;
+    private int maxWeightShip;
+    private Random random = new Random();
+    Thread thread;
+
+    Dock(Repository repository, int maxWeightShip) {
+        this.repository = repository;
+        this.maxWeightShip = maxWeightShip;
+        thread = new Thread(this);
+        thread.start();
+    }
+
+    @Override
+    public void run() {
+        int weight =  random.nextInt(maxWeightShip);
+        Ship ship = new Ship(random.nextBoolean(), weight, repository);
+        ship.charge();
+    }
+}
