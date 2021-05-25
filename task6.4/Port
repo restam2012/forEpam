@@ -1,11 +1,9 @@
-import java.util.Random;
-
 public class Port{
-    private int maxWeightRepository;
-    private int maxWeightShip;
-    private int weightRepository;
-    private int capacity;
-    private Repository repository;
+    private int maxWeightRepository; //Вместимость склада
+    private int maxWeightShip; //Грузоподьемность корабля
+    private int weightRepository; //Загрузка склада в начальный момент
+    private int capacity; //Количество пристаней в порту (то есть количество поптоков в программе)
+    private Repository repository; //Экземпляр склада, нужен что бы все доки работали с одним складом
 
     public Port(int maxWeightRepository, int maxWeightShip, int weightRepository, int capacity) {
         this.maxWeightRepository = maxWeightRepository;
@@ -22,7 +20,10 @@ public class Port{
     public void startCharge(){
         Dock[] docks = new Dock[capacity];
         for (int i = 0; i < docks.length; i++) {
-            docks[i] = new Dock(repository, maxWeightShip);
+            try {
+                docks[i] = new Dock(repository, maxWeightShip);
+            } catch (IllegalArgumentException e){e.printStackTrace();}
+
         }
         while (true){
             for(int i = 0; i < docks.length; i++){
