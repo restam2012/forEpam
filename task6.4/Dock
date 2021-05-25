@@ -15,9 +15,61 @@ public class Dock implements Runnable{
     }
 
     @Override
-    public void run() {
+    public void run() throws IllegalArgumentException {
         int weight =  random.nextInt(maxWeightShip);
-        Ship ship = new Ship(random.nextBoolean(), weight, repository);
-        ship.charge();
+        Ship ship = new Ship(random.nextBoolean(), weight);
+        charge(ship);
+    }
+
+    //Предполагается, что если корабль пустой, то в начале груз резервируется,после чего будет погрузка пропорционально размеру корабля
+    //Если корабль с грузом, то в начале разгружается, а потом груз добавляется в список доступного
+    //Вывод в консоль пришлось реализовать в данном методе, так как иначе теряется связь программы с внешним миром. Требуется информационное
+    //сообщение в момент резервирования груза/добавления груза в список возможного. Если сделать тип возвращаемого элемента как String
+    //и вывод провести через main(), то данные о резервировании будет поступать уже после отплытия корабля.
+    public void charge(Ship ship) throws IllegalArgumentException{
+        if(ship.isEmpty()){
+            System.out.println(sub(ship.getWeight()));
+            try {
+                Thread.sleep(ship.getWeight());
+            } catch (InterruptedException e){e.printStackTrace();}
+        }
+        else {
+            try {
+                Thread.sleep(ship.getWeight());
+            } catch (InterruptedException e){e.printStackTrace();}
+            System.out.println(add(ship.getWeight()));
+        }
+    }
+
+    //Выгрузить груз на склад
+    public String add(int w) throws IllegalArgumentException{
+        if(w < 0) throw new IllegalArgumentException("You can't use default ship");
+        String msg = "";
+        int newWeight = repository.getWeight() + w;
+        if(newWeight > repository.getMaxWeight()){
+            msg = "In ship stand " + (newWeight - repository.getMaxWeight()) + " weight. Repository is full.";
+            repository.setWeight(repository.getMaxWeight());
+        }
+        else {
+            repository.setWeight(newWeight);
+            msg = "The repository successful charge for " + w + "weight. Total count of weight is " + repository.getWeight();
+        }
+        return msg;
+    }
+
+    //Добавить на склад
+    public String sub(int w) throws IllegalArgumentException{
+        if(w < 0) throw new IllegalArgumentException("You can't use default ship");
+        String msg = "";
+        int newWeight = repository.getWeight() - w;
+        if(newWeight < 0){
+            msg = "By ship was charge " + repository.getWeight() + " weight. Repository is empty.";
+            repository.setWeight(0);
+        }
+        else {
+            repository.setWeight(newWeight);
+            msg = "The ship successful charge for " + w + "weight. Total count of weight is " + repository.getWeight();
+        }
+        return msg;
     }
 }
