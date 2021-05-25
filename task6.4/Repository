@@ -1,41 +1,55 @@
-public class Repository {
+import java.io.Serializable;
+import java.util.Objects;
+
+public class Repository implements Serializable {
     private int weight;
     private int maxWeight;
 
+    public Repository(){
+        weight = 0;
+        maxWeight = 0;
+    }
 
     public Repository(int weight, int maxWeight) {
         this.weight = weight;
         this.maxWeight = maxWeight;
     }
 
-    synchronized void action(int w, boolean add){
-        if(add) add(w);
-        else sub(w);
+    public int getWeight() {
+        return weight;
     }
 
-    //Выгрузить груз на склад
-    public void add(int w){
-        int newWeight = weight + w;
-        if(newWeight > maxWeight){
-            System.out.println("In ship stand " + (newWeight - maxWeight) + " weight. Repository is full.");
-            weight = maxWeight;
-        }
-        else {
-            weight = newWeight;
-            System.out.println("The repository successful charge for " + w + "weight. Total count of weight is " + weight);
-        }
+    synchronized public void setWeight(int weight) {
+        this.weight = weight;
     }
 
-    //
-    public void sub(int w){
-        int newWeight = weight - w;
-        if(newWeight < 0){
-            System.out.println("By ship was charge " + weight + " weight. Repository is empty.");
-            weight = 0;
-        }
-        else {
-            weight = newWeight;
-            System.out.println("The ship successful charge for " + w + "weight. Total count of weight is " + weight);
-        }
+    public int getMaxWeight() {
+        return maxWeight;
     }
+
+    public void setMaxWeight(int maxWeight) {
+        this.maxWeight = maxWeight;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Repository that = (Repository) o;
+        return weight == that.weight && maxWeight == that.maxWeight;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(weight, maxWeight);
+    }
+
+    @Override
+    public String toString() {
+        return "Repository{" +
+                "weight=" + weight +
+                ", maxWeight=" + maxWeight +
+                '}';
+    }
+
 }
