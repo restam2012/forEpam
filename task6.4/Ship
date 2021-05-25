@@ -1,27 +1,54 @@
-public class Ship {
-    private boolean isEmpty;
-    private int weight;
-    private Repository repository;
+import java.io.Serializable;
+import java.util.Objects;
 
-    public Ship(boolean isEmpty, int weight, Repository repository) {
-        this.isEmpty = isEmpty;
-        this.weight = weight;
-        this.repository = repository;
+public class Ship implements Serializable {
+    private boolean empty;
+    private int weight;
+
+    public Ship(){
+        weight = -1;
+        empty = false;
     }
-//Предполагается, что если корабль пустой, то в начале груз резервируется,после чего будет погрузка пропорционально размеру корабля
-    //Если корабль с грузом, то в начале разгружается, а потом груз добавляется в список доступного
-    public void charge(){
-        if(isEmpty){
-            repository.action(weight, false);
-            try {
-                Thread.sleep(weight);
-            } catch (InterruptedException e){e.printStackTrace();}
-        }
-        else {
-            try {
-                Thread.sleep(weight);
-            } catch (InterruptedException e){e.printStackTrace();}
-            repository.action(weight, true);
-        }
+
+    public Ship(boolean isEmpty, int weight) {
+        this.empty = isEmpty;
+        this.weight = weight;
+    }
+
+    public boolean isEmpty() {
+        return empty;
+    }
+
+    public void setEmpty(boolean empty) {
+        this.empty = empty;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ship ship = (Ship) o;
+        return empty == ship.empty && weight == ship.weight;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(empty, weight);
+    }
+
+    @Override
+    public String toString() {
+        return "Ship{" +
+                "isEmpty=" + empty +
+                ", weight=" + weight +
+                '}';
     }
 }
