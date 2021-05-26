@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 public class UserCreator {
 
+    //Вход в систему
     public AbstractUsers logIn(String login, String password){
         XmlReader xmlReader = new XmlReader();
         return xmlReader.xmlReaderUser(login, password);
@@ -20,12 +21,12 @@ public class UserCreator {
     public AbstractUsers signIn(PrintWriter out, Scanner in){
         AbstractUsers user = null;
         while (user == null){
-            out.println("Enter login or '0' if you want exit:");
-            String login = in.nextLine().trim();
-            if(login.equals("0")) return null;
-            out.println("Enter password:");
-            String pass = in.nextLine();
-            user = addNewUser(login, pass, false);
+            List dataForEntry = loginAndPass(out, in);
+            if(dataForEntry != null) {
+                dataForEntry.add(false);
+                user = addNewUserToXml(dataForEntry);
+            }
+            else return null;
         }
         return user;
     }
@@ -35,13 +36,13 @@ public class UserCreator {
         AbstractUsers user = null;
         CaseCommands commands = new CaseCommands();
         while (user == null){
-            out.println("Enter login or '0' if you want exit:");
-            String login = in.nextLine().trim();
-            if(login.equals("0")) return;
-            out.println("Enter password:");
-            String pass = in.nextLine();
-            boolean isAdmin = commands.toCheckBoolean("Do you want add admin?", out, in);
-            user = addNewUser(login, pass, isAdmin);
+            List dataForEntry = loginAndPass(out, in);
+            if(dataForEntry != null) {
+                dataForEntry.add(commands.toCheckBoolean("Do you want add admin?", out, in)); //Не уверен, что это правильное решение использовать
+                //здесь метод из данного пакета, однако это удобно... Хотелось бы узнать совета, что лучше, дублирование кода, или вот такое вот исспользование
+                user = addNewUserToXml(dataForEntry);
+            }
+            else return;
         }
     }
 
@@ -49,24 +50,26 @@ public class UserCreator {
     public void addFirstUser(PrintWriter out, Scanner in){
         AbstractUsers user = null;
         while (user == null){
-            out.println("Enter login or '0' if you want exit:");
-            String login = in.nextLine().trim();
-            if(login.equals("0")) return;
-            out.println("Enter password:");
-            String pass = in.nextLine();
-            user = new Admin(login, pass);
-            List<AbstractUsers> users = new ArrayList<>();
-            users.add(user);
-            XmlWriter writer = new XmlWriter();
-            writer.xmlWriterUsers(users);
+            List dataForEntry = loginAndPass(out, in);
+            if(dataForEntry != null) {
+                dataForEntry.add(true);
+                user = addNewUserToXml(dataForEntry);
+            }
+            else out.print("You must enter admin login and pass|");
         }
     }
 
 
-    private AbstractUsers addNewUser(String login, String pass, boolean isAdmin){
+    //Метод для добавления данных в XML файл
+    private AbstractUsers addNewUserToXml(List dataForRegister){
         XmlReader reader = new XmlReader();
         List<AbstractUsers> users = reader.readListOfUsers();
         AbstractUsers myUser;
+
+        //Разворачиваем данные для логирования
+        String login = (String) dataForRegister.get(0);
+        String pass = (String) dataForRegister.get(1);
+        boolean isAdmin = (Boolean) dataForRegister.get(2);
 
         //Проверка, что данный логин свободен
         for(AbstractUsers user:users){
@@ -81,5 +84,17 @@ public class UserCreator {
         XmlWriter writer = new XmlWriter();
         writer.xmlWriterUsers(users);
         return myUser;
+    }
+
+    private List<String> loginAndPass(PrintWriter out, Scanner in){
+        List<String> logAndPass = new ArrayList();
+        out.println("Enter login or '0' if you want exit:");
+        String login = in.nextLine().trim();
+        if(login.equals("0")) return null;
+        out.println("Enter password:");
+        String pass = in.nextLine();
+        logAndPass.add(login);
+        logAndPass.add(pass);
+        return logAndPass;
     }
 }
