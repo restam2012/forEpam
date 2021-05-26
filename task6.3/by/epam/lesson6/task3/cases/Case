@@ -1,17 +1,22 @@
 package by.epam.lesson6.task3.cases;
 
-import java.util.List;
+import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
-public class Case {
-    String name;
-    String faculty;
-    String location;
-    boolean isHostel;
-    boolean isBudget;
-    double averageGrade;
-    String comment;
-    Set<Privileges> privileges;
+public class Case implements Serializable {
+    private String name;
+    private String faculty;
+    private String location;
+    private boolean isHostel;
+    private boolean isBudget;
+    private double averageGrade;
+    private String comment;
+    private Set<Privileges> privileges;
+
+    public Case(){
+
+    }
 
     public Case(String name, String faculty, String location, boolean isHostel, boolean isBudget, double averageGrade, String comment, Set<Privileges> privileges) {
         this.name = name;
@@ -56,12 +61,6 @@ public class Case {
         return privileges;
     }
 
-    @Override
-    public String toString() {
-        return name + '\t' + faculty + '\t' + location + '\t' + isHostel + '\t' + isBudget + '\t' + averageGrade +
-                '\t' + comment + '\t' + privileges;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -92,5 +91,23 @@ public class Case {
 
     public void setPrivileges(Set<Privileges> privileges) {
         this.privileges = privileges;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Case aCase = (Case) o;
+        return isHostel == aCase.isHostel && isBudget == aCase.isBudget && Double.compare(aCase.averageGrade, averageGrade) == 0 && Objects.equals(name, aCase.name) && Objects.equals(faculty, aCase.faculty) && Objects.equals(location, aCase.location) && Objects.equals(comment, aCase.comment) && Objects.equals(privileges, aCase.privileges);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, faculty, location, isHostel, isBudget, averageGrade, comment, privileges);
+    }
+
+    public String toString() {
+        return name + '\t' + faculty + '\t' + location + '\t' + isHostel + '\t' + isBudget + '\t' + averageGrade +
+                '\t' + comment + '\t' + privileges;
     }
 }
