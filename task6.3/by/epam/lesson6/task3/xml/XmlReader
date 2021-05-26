@@ -19,12 +19,6 @@ import java.util.*;
 
 public class XmlReader {
 
-    public void createFirstUser(PrintWriter out, Scanner in) {
-        UserCreator creator = new UserCreator();
-        out.print("In base not find any users. Please, enter first user (it mast be administrator). | ");
-        creator.addFirstUser(out, in);
-    }
-
     public AbstractUsers xmlReaderUser(String login, String password){
         List<AbstractUsers> abstractUsersList = readListOfUsers();
         for(AbstractUsers abstractUsers : abstractUsersList) {
@@ -39,16 +33,20 @@ public class XmlReader {
     public List<AbstractUsers> readListOfUsers(){
         List<AbstractUsers> abstractUsersList = new ArrayList<>();
         File fileUsers = new File("./data/User.xml");
-        try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(fileUsers);
-            document.getDocumentElement().normalize();
-            NodeList nodeList = document.getElementsByTagName("user");
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                abstractUsersList.add(getNodeUser(nodeList.item(i)));
+        if(fileUsers.exists() || fileUsers.length() != 0) {
+            try {
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                Document document = builder.parse(fileUsers);
+                document.getDocumentElement().normalize();
+                NodeList nodeList = document.getElementsByTagName("user");
+                for (int i = 0; i < nodeList.getLength(); i++) {
+                    abstractUsersList.add(getNodeUser(nodeList.item(i)));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e){e.printStackTrace();}
+        }
         return abstractUsersList;
     }
 
@@ -115,3 +113,4 @@ public class XmlReader {
         } catch (NullPointerException e){return "";}
     }
 }
+
