@@ -38,9 +38,11 @@ public class Server {
     private static void startMenu(PrintWriter out, Scanner in){
         while (true) {
             File userFile = new File("./data/User.xml");
+            //Проверка, что в базе есть хоть один пользователь. Если нет, то требуется создать первого пользователя - администратора.
             if(!userFile.exists() || userFile.length() == 0){
-                XmlReader xmlReader = new XmlReader();
-                xmlReader.createFirstUser(out, in);
+                out.print("In base not find any users. Please, enter first user (it mast be administrator). | ");
+                UserCreator userCreator = new UserCreator();
+                userCreator.addFirstUser(out, in);
             }
 
             out.println("Please, press 1 if you want log in or 2 if you want sing in. Press 0 if you want exit");
