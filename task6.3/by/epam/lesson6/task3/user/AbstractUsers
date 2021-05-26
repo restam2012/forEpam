@@ -3,18 +3,21 @@ package by.epam.lesson6.task3.user;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+// Не вижу смысла делать этот класс Java Been... Возможно я плохо разбираюсь, но данный класс польностью идентичен классам, представленных в учебной
+//литературе в теме абстрактных классов. Да и вообще классический Java Been странно использовать при наследовании...
+
 public abstract class AbstractUsers {
     private String name;
     private String password;
     private boolean isAdmin;
 
-    protected AbstractUsers(String name, String password, boolean isAdmin) {
+    AbstractUsers(String name, String password, boolean isAdmin) {
         this.name = name;
         this.password = password;
         this.isAdmin = isAdmin;
     }
 
-    protected AbstractUsers(String name, String password){
+    AbstractUsers(String name, String password){
         this.name = name;
         this.password = password;
         this.isAdmin = false;
