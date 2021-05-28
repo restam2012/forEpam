@@ -6,12 +6,14 @@ import java.util.*;
 public class RemarkCommand {
 
     //показ всех заметок, переданных на вход
-    public void showRemarks(List<Remark> remarks){
+    public String showRemarks(List<Remark> remarks){
         //String topic; Date dateCreate; String email; String message;
-        System.out.println("Topic\tDate of create\tE-mail\tMessage");
+        String message = "";
+        message += "Topic\tDate of create\tE-mail\tMessage\n";
         for(Remark r:remarks){
-            System.out.println(r);
+            message += r + "\n";
         }
+        return message;
     }
 
     //Методы для поиску по любому параметру. Понимаю, что повторы кода не очень, но лучшие идеи в голову не приходят
