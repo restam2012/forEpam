@@ -1,18 +1,30 @@
 package by.epam.lessons6.task2.remark;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Objects;
 
-public class Remark {
+public class Remark implements Serializable {
     private String topic;
     private Calendar dateCreate;
     private String email;
     private String message;
+    private Check check = new Check();
 
-    public Remark(String topic, Calendar dateCreate, String email, String message) {
+    public Remark() {
+        topic = "";
+        dateCreate = new GregorianCalendar();
+        email = "";
+        message = "";
+    }
+
+    public Remark(String topic, Calendar dateCreate, String email, String message) throws IllegalArgumentException {
         this.topic = topic;
         this.dateCreate = dateCreate;
+        if(!check.checkEmail(email)) throw new IllegalArgumentException("Email is not correct");
         this.email = email;
         this.message = message;
     }
@@ -22,10 +34,6 @@ public class Remark {
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
         return topic + '\t' + df.format(dateCreate.getTime()) + '\t' + email + '\t' + message + '\t';
-    }
-
-    public String toSaveInFile(){
-        return topic + '\t' + dateCreate.getTimeInMillis() + '\t' + email + '\t' + message + '\t';
     }
 
     public String getTopic() {
@@ -42,5 +50,36 @@ public class Remark {
 
     public String getMessage() {
         return message;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
+    public void setDateCreate(Calendar dateCreate) {
+        this.dateCreate = dateCreate;
+    }
+
+    public void setEmail(String email) {
+        if(!check.checkEmail(email)) throw new IllegalArgumentException("Email is not correct");
+            this.email = email;
+
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Remark remark = (Remark) o;
+        return Objects.equals(topic, remark.topic) && Objects.equals(dateCreate, remark.dateCreate) && Objects.equals(email, remark.email) && Objects.equals(message, remark.message) && Objects.equals(check, remark.check);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(topic, dateCreate, email, message, check);
     }
 }
