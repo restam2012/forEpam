@@ -1,5 +1,6 @@
 package by.epam.lessons6.task2;
 
+import by.epam.lessons6.task2.remark.Check;
 import by.epam.lessons6.task2.remark.Remark;
 import by.epam.lessons6.task2.remark.RemarkCommand;
 
@@ -8,7 +9,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Notepad {
@@ -16,7 +16,10 @@ public class Notepad {
     List<Remark> remarks = new ArrayList<>();
     Scanner readFromCommandLine = new Scanner(System.in);
     RemarkCommand remarkCommand = new RemarkCommand();
+    Check check = new Check();
 
+    //Данный код выполняет условие из задания:
+    //В начале работы приложения данные должны считываться из файла.
     {
         if (fileOfRemark.exists() && fileOfRemark.length() > 0) {
             try (FileReader readRemark = new FileReader(fileOfRemark)) {
@@ -29,6 +32,9 @@ public class Notepad {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
+                System.out.println("The file is damaged!");
             }
         }
     }
@@ -48,9 +54,9 @@ public class Notepad {
                         break;
                     case "2":
                         //String topic; Date dateCreate; String email; String message;
-                        remarkCommand.showRemarks(remarks);
+                        System.out.println(remarkCommand.showRemarks(remarks));
                         while (sorting(remarks)) {
-                            remarkCommand.showRemarks(remarks);
+                            System.out.println(remarkCommand.showRemarks(remarks));
                         }
                         break;
                     case "3":
@@ -63,30 +69,37 @@ public class Notepad {
                 }
             }
         } catch (Exception e){e.printStackTrace();}
+        ////Данный код выполняет условие из задания:
+        // В конце работы – сохраняться в файл.
         finally {
             try (FileWriter writerRemark = new FileWriter(fileOfRemark, false)){
                 for (Remark r:remarks){
-                    writerRemark.write(r.toSaveInFile() + "\n");
+                    String toSaveInFile = r.getTopic() + '\t' + r.getDateCreate().getTimeInMillis() + '\t' + r.getEmail() + '\t' + r.getMessage() + '\t';
+                    writerRemark.write(toSaveInFile + "\n");
                 }
             } catch (Exception e){e.printStackTrace();}
         }
     }
 
-
+//Добавить заметку
     private void addNewRemark() {
-        System.out.println("Enter topic:");
-        String topic = readFromCommandLine.nextLine();
-        String email;
-        while (true) {
+        boolean addedSuccessful = false;
+        while (!addedSuccessful) {
+            System.out.println("Enter topic, or enter '0' to exit:");
+            String topic = readFromCommandLine.nextLine();
+            if(topic.equals("0")) return;
             System.out.println("Enter email:");
-            email = readFromCommandLine.nextLine();
-            if(!checkEmail(email)) System.out.println("You enter not correct email");
-            else break;
+            String email = readFromCommandLine.nextLine();
+            System.out.println("Enter message:");
+            String message = readFromCommandLine.nextLine();
+            try {
+                remarks.add(new Remark(topic, new GregorianCalendar(), email, message));
+                System.out.println("Remark added successful");
+                addedSuccessful = true;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
         }
-        System.out.println("Enter message:");
-        String message = readFromCommandLine.nextLine();
-        remarks.add(new Remark(topic, new GregorianCalendar(), email, message));
-        System.out.println("Remark added successful");
     }
 
     private boolean sorting(List<Remark> remarkList) {
@@ -112,6 +125,7 @@ public class Notepad {
         return true;
     }
 
+    //Меню для поиска заметок
     private boolean findRemark(List<Remark> remarkList){
         System.out.println("Select type of find:");
         System.out.println("'1' - simple find in all text ");
@@ -184,16 +198,31 @@ public class Notepad {
     }
 
     private List<Remark> findByDate(List<Remark> remarkList){
-        String strOfDataStart, strOfDataEnd;
-        do {
+        String strOfDataStart =  "", strOfDataEnd = "";
+        boolean correctData = false;
+        while (!correctData) {
             System.out.println("Enter day.month.year (e.g. 01.01.2021) of start find, or null");
             strOfDataStart = readFromCommandLine.nextLine().trim();
-        } while (checkDate(strOfDataStart));
+            if(check.checkDate(strOfDataStart)){
+                correctData = true;
+            }
+            else {
+                System.out.println("You enter not correct string");
+            }
+        }
         Calendar dateOfStart = parseStringToCalendar(strOfDataStart, true);
-        do {
+
+        correctData = false;
+        while (!correctData) {
             System.out.println("Enter day.month.year (e.g. 01.01.2021) of end find, or null");
             strOfDataEnd = readFromCommandLine.nextLine().trim();
-        } while (checkDate(strOfDataEnd));
+            if(check.checkDate(strOfDataEnd)){
+                correctData = true;
+            }
+            else {
+                System.out.println("You enter not correct string");
+            }
+        }
         Calendar dateOfEnd = parseStringToCalendar(strOfDataEnd, false);
         return remarkCommand.findInDate(remarkList, dateOfStart, dateOfEnd);
     }
@@ -208,40 +237,5 @@ public class Notepad {
         return remarkCommand.findInMessage(remarkList, readFromCommandLine.nextLine());
     }
 
-    private boolean checkDate(String date){
-        Pattern pattern = Pattern.compile("\\d{1,2}\\.\\d{1,2}\\.\\d{4}");
-        Matcher matcher = pattern.matcher(date);
-        if(matcher.find() || date.matches("null")) return false;
-        else {
-            System.out.println("You enter not correct string");
-            return true;
-        }
-    }
 
-    private boolean checkEmail(String email){
-        /*Из вики
-        * Local-part
-The local-part of the email address may be unquoted or may be enclosed in quotation marks.
-
-If unquoted, it may use any of these ASCII characters:
-
-uppercase and lowercase Latin letters A to Z and a to z
-digits 0 to 9
-printable characters !#$%&'*+-/=?^_`{|}~
-dot ., provided that it is not the first or last character and provided also that it does not appear consecutively
-*
-* he domain name part of an email address has to conform to strict guidelines: it must match the requirements for a hostname, a list of dot-separated DNS labels, each label being limited to a length of 63 characters and consisting of:[5]:§2
-
-uppercase and lowercase Latin letters A to Z and a to z;
-digits 0 to 9, provided that top-level domain names are not all-numeric;
-hyphen -, provided that it is not the first or last character*
-
-Про домент не полностью расписано. Предположу, что последняя часть должна состоять из .[буквы или цифры]/
-         */
-
-        if(email.matches("[\\w\\!#$%&'\\*\\+\\-/=\\?\\^`\\{\\|\\}~][\\w\\!#$%&'\\*\\+\\-/=\\?\\^`\\{\\|\\}~\\.]*[\\w\\!#$%&'\\*\\+\\-/=\\?\\^`\\{\\|\\}~]@[\\w][\\w-]*[\\w]\\.[\\w]*")){
-            return true;
-        }
-        return false;
-    }
 }
