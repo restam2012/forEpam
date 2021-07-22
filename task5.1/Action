@@ -1,0 +1,44 @@
+import java.io.File;
+import java.io.PrintWriter;
+import java.nio.file.Path;
+
+public class Action {
+    public boolean createFile(TextFile file){
+        File folder = file.getFolder().path.toFile();
+        folder.mkdir();
+        try (PrintWriter newFile = new PrintWriter(file.toString())){
+            newFile.print(file.getText());
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean renameFile(TextFile file, String newName){
+        String pathToFile = file.toString();
+        deleteFile(file);
+        file.setName(newName);
+        return createFile(file);
+    }
+
+    public boolean deleteFile(TextFile file){
+        String pathToFile = file.toString();
+        File myFile = new File(pathToFile);
+        myFile.delete();
+        return true;
+    }
+
+    public String showText(TextFile file){
+        return file.getText();
+    }
+
+    public boolean addText(TextFile file, String textForAdded){
+        String text = file.getText();
+        file.setText(text + textForAdded);
+        deleteFile(file);
+        createFile(file);
+        return true;
+    }
+
+}
