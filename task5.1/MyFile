@@ -1,71 +1,59 @@
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Scanner;
+import java.io.Serializable;
+import java.util.Objects;
 
-public class MyFile {
+public class MyFile implements Serializable {
     private Folder folder;
-    private String name;
     private String type;
-    private String text;
-    Path pathToFile;
+    private String name;
 
-    public MyFile(Folder folder, String name, String type, String text) {
+    public MyFile() {
+    }
+
+    public MyFile(Folder folder, String type, String name) {
         this.folder = folder;
-        this.name = name;
         this.type = type;
-        this.text = text;
-        setPath();
-    }
-
-    public MyFile(File file) throws FileNotFoundException{
-        if(!file.exists()) throw new FileNotFoundException();
-        else {
-            text = new String();
-            String path = file.getPath();
-            folder = new Folder(Path.of(path.substring(0, path.lastIndexOf("\\"))));
-            name = file.getName().substring(0, file.getName().lastIndexOf("."));
-            type = file.getName().substring(file.getName().lastIndexOf(".") + 1);
-            try (FileReader reader = new FileReader(file)){
-                Scanner scanner = new Scanner(reader);
-                while (scanner.hasNext()){
-                    text += scanner.nextLine() + "\n";
-                }
-            } catch (IOException e){e.printStackTrace();}
-        }
-    }
-
-    private void setPath(){
-        pathToFile = Path.of(folder + "\\" + name + "." + type);
-    }
-
-    public void createFile(){
-        try (PrintWriter fileWriter = new PrintWriter(pathToFile.toFile())) {
-            fileWriter.print(text);
-        } catch (IOException e){ e.printStackTrace(); }
-    }
-
-    public void changeName(String name){
-        delete();
         this.name = name;
-        setPath();
-        try (PrintWriter fileWriter = new PrintWriter(pathToFile.toFile())) {
-            fileWriter.print(text);
-        } catch (IOException e){ e.printStackTrace(); }
     }
 
-    public void delete(){
-        try {
-            Files.delete(Path.of(folder + "\\" + name + "." + type));
-        } catch (IOException e){ e.printStackTrace(); }
+    public Folder getFolder() {
+        return folder;
     }
 
-    String getText() {
-        return text;
+    public void setFolder(Folder folder) {
+        this.folder = folder;
     }
 
-    void setText(String text) {
-        this.text = text;
+    public String getType() {
+        return type;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MyFile myFile = (MyFile) o;
+        return Objects.equals(folder, myFile.folder) && Objects.equals(type, myFile.type) && Objects.equals(name, myFile.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(folder, type, name);
+    }
+
+    @Override
+    public String toString() {
+        return getFolder().toString() + "\\" + getName() + "." + getType();
+    }
 }
