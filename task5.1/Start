@@ -1,0 +1,15 @@
+import java.nio.file.Path;
+
+public class Start {
+    public static void main(String[] args) {
+        Folder folder = new Folder();
+        folder.setPath(Path.of(".\\Data"));
+        TextFile file = new TextFile(folder, "myFirstFile", "This is text");
+        Action action = new Action();
+        action.createFile(file);
+        action.renameFile(file, "secondFile");
+        action.addText(file, ". Victory!");
+        System.out.println(action.showText(file));
+    }
+
+}
