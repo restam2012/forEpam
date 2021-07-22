@@ -2,6 +2,7 @@ package by.epam.lesson6.task1.users;
 
 import by.epam.lesson6.task1.book.BaseOfBook;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Admin extends AbstractUser {
@@ -10,49 +11,22 @@ public class Admin extends AbstractUser {
     private boolean isAdmin;
     private String eMail;
     BaseOfBook baseOfBook = new BaseOfBook();
+    CommunicationUsers communicationUsers = new CommunicationUsers();
 
     public Admin(String login, String pass, String eMail) {
         super(login, pass, true, eMail);
         super.baseOfBook = baseOfBook;
     }
 
-    void modify(){
-        baseOfBook.modify();
+    public void showMenu(){
+        communicationUsers.startMenuAdmin(this);
     }
 
-    public void showMenu(){
-        while (true) {
-            System.out.println("Select action, press:");
-            System.out.println("'1' if you want showBoos");
-            System.out.println("'2' if you want find book");
-            System.out.println("'3' if you want modify catalog");
-            System.out.println("'4' if you want add new user or admin");
-            System.out.println("'0' if you want exit");
-            Scanner scanner = new Scanner(System.in);
-            switch (scanner.nextLine().trim()){
-                case "1":
-                    showBooks();
-                    break;
-                case "2":
-                    System.out.println("Enter, what you want to find:");
-                    find(scanner.nextLine().trim());
-                    break;
-                case "3":
-                    modify();
-                    break;
-                case "4":
-                    FirstUser firstUser = new FirstUser();
-                    System.out.println("Do you want add admin? Enter 'yes' or 'no'");
-                    String answer = scanner.nextLine().trim();
-                    if(answer.equals("yes")) firstUser.addFirstUser();
-                    else if(answer.equals("no")) firstUser.addUser();
-                    else System.out.println("You enter wrong string");
-                    break;
-                case "0":
-                    return;
-                default:
-                    System.out.println("You enter not correct val");
-            }
-        }
+    void modify(){
+        communicationUsers.modify();
+    }
+
+    List find(String combination){
+        return baseOfBook.find(combination);
     }
 }
