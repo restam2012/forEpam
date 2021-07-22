@@ -1,0 +1,19 @@
+package by.epam.lesson6.task1.book;
+
+public enum BooksText {
+    SHOW("If you want open full description"),
+    ADD("If you want add books"),
+    DEL("If you want delete recording"),
+    MOD("If you want modify recording");
+
+    private String title;
+
+    BooksText(String title){
+        this.title = title;
+    }
+
+    @Override
+    public String toString() {
+        return title;
+    }
+}
