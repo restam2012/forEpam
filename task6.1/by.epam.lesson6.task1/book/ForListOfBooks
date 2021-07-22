@@ -1,0 +1,43 @@
+package by.epam.lesson6.task1.book;
+
+import java.util.List;
+
+//Данный класс нужен для упаковки выдаваемой информации из класса BaseOfBook в класс CommunicationUsers
+public class ForListOfBooks {
+    private String result;
+    private int page;
+    private List<Book> arrayListOfBook;
+
+    public ForListOfBooks() {
+    }
+
+    public ForListOfBooks(String result, int page, List<Book> arrayListOfBook) {
+        this.result = result;
+        this.page = page;
+        this.arrayListOfBook = arrayListOfBook;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public List<Book> getArrayListOfBook() {
+        return arrayListOfBook;
+    }
+
+    public void setArrayListOfBook(List<Book> arrayListOfBook) {
+        this.arrayListOfBook = arrayListOfBook;
+    }
+}
