@@ -1,12 +1,18 @@
 package by.epam.lesson6.task1.users;
 
+import java.util.List;
+
 public class User extends AbstractUser {
-    private String login;
-    private String pass;
-    private boolean isAdmin;
-    private String eMail;
 
     public User(String login, String pass, String eMail) {
         super(login, pass, false, eMail);
+    }
+
+    public void showMenu(){
+        CommunicationUsers communicationUsers = new CommunicationUsers();
+        communicationUsers.startMenuUser(this);
+    }
+    List find(String combination){
+        return baseOfBook.find(combination);
     }
 }
