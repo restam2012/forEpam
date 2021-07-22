@@ -1,0 +1,291 @@
+package by.epam.lesson6.task1.users;
+
+import by.epam.lesson6.task1.book.*;
+import by.epam.lesson6.task1.mail.SenderEmail;
+import java.util.List;
+import java.util.Scanner;
+
+public class CommunicationUsers {
+    Scanner scanner = new Scanner(System.in);
+
+    protected void startMenuUser(AbstractUser abstractUser) {
+        while (true) {
+            System.out.println("Select action, press:");
+            System.out.println("'1' if you want show books");
+            System.out.println("'2' if you want find book");
+            System.out.println("'0' if you want exit");
+            switch (scanner.nextLine().trim()) {
+                case "1":
+                    pageControl(BooksText.SHOW.toString());
+                    break;
+                case "2":
+                    System.out.println("Enter, what you want to find:");
+                    List resultFind = abstractUser.find(scanner.nextLine().trim()); // получить список после поиска
+                    pageControl(BooksText.SHOW.toString(), resultFind);
+                    break;
+                case "0":
+                    return;
+                default:
+                    System.out.println("You enter not correct val");
+            }
+        }
+    }
+
+    protected void startMenuAdmin(AbstractUser abstractUser) {
+        while (true) {
+            System.out.println("Select action, press:");
+            System.out.println("'1' if you want showBooks");
+            System.out.println("'2' if you want find book");
+            System.out.println("'3' if you want modify catalog");
+            System.out.println("'4' if you want add new user or admin");
+            System.out.println("'0' if you want exit");
+            Scanner scanner = new Scanner(System.in);
+            switch (scanner.nextLine().trim()) {
+                case "1":
+                    int currentPage = 1;
+                    while (currentPage != -1) {
+                        currentPage = showBooks(BooksText.SHOW.toString(), currentPage);
+                    }
+                    break;
+                case "2":
+                    System.out.println("Enter, what you want to find:");
+                    List resultFind = abstractUser.find(scanner.nextLine().trim()); // получить список после поиска
+                    currentPage = 1;
+                    while (currentPage != -1) {
+                        currentPage = showBooks(BooksText.SHOW.toString(), currentPage, resultFind);
+                    }
+                    break;
+                case "3":
+                    Admin admin = (Admin) abstractUser;
+                    admin.modify();
+                    break;
+                case "4":
+                    FirstUser firstUser = new FirstUser();
+                    System.out.println("Do you want add admin? Enter 'yes' or 'no'");
+                    String answer = scanner.nextLine().trim();
+                    if (answer.equals("yes")) firstUser.addFirstUser();
+                    else if (answer.equals("no")) firstUser.addUser();
+                    else System.out.println("You enter wrong string");
+                    break;
+                case "0":
+                    return;
+                default:
+                    System.out.println("You enter not correct val");
+            }
+        }
+    }
+
+//Метод отображения массива книг. Так же работает с меню внутри режима показа книг.
+    private int showBooks(String text, int currentPage, List... lists) {
+        BaseOfBook baseOfBook = new BaseOfBook();
+        ForListOfBooks listOfBooks;
+        if(lists.length == 1){
+            listOfBooks = baseOfBook.showBooks(lists[0], currentPage, text);
+        }
+        else {
+            listOfBooks = baseOfBook.showBooks(currentPage, text);
+        }
+        int pages = listOfBooks.getPage();
+        List<Book> arrayListOfBook = listOfBooks.getArrayListOfBook();
+        System.out.println(listOfBooks.getResult());
+        String choice = scanner.nextLine().toLowerCase();
+
+        if (choice.equals("e") || choice.equals("0")) {
+            System.out.println("OK");
+            return -1;
+        } else if (choice.equals("n")) {
+            if (currentPage >= pages) System.out.println("You can't go to next page");
+            else currentPage++;
+        }
+        //Предыдущая страница
+        else if (choice.equals("p")) {
+            if (currentPage <= 1) System.out.println("You can't go to previous page");
+            else currentPage--;
+        }
+        //Указать страницу
+        else if (choice.matches("page \\d+")) {
+            choice = choice.replaceAll("^page\\s*", "");
+            System.out.println(choice);
+            int p = Integer.parseInt(choice);
+            if (p <= pages && p >= 1) currentPage = p;
+            else System.out.println("This is non-existent page");
+        }
+
+        //Указать номер записи, далее из text определяется, что будет делаться с данной записью
+        else if (choice.trim().matches("\\d+")) {
+            int p = Integer.parseInt(choice) - 1;
+            int position = 10 * (currentPage - 1) + p;
+            Book selectedBook = baseOfBook.selectCheckedBook(position, arrayListOfBook);
+            //Открыть полную информацию
+            if (text.contains("full")) {
+                System.out.println(selectedBook.toString());
+            }
+            //Удалить выбранную запись
+            else if (text.contains("del")) {
+                baseOfBook.removeBook(selectedBook);
+            }
+            //Изменить выбранную запись
+            else if (text.contains("modify")) {
+                System.out.println(selectedBook);
+                while (true) {
+                    System.out.println("What want you refactor? You can change name, author, genre, type, description, storage or exit. Enter one of this word.");
+                    String ch = scanner.nextLine().toLowerCase().trim();
+                    switch (ch) {
+                        case "name":
+                            System.out.println("Enter new name:");
+                            String name = scanner.nextLine().trim();
+                            selectedBook.setName(name);
+                            break;
+                        case "author":
+                            System.out.println("Enter new author:");
+                            String author = scanner.nextLine().trim();
+                            selectedBook.setAuthor(author);
+                            break;
+                        case "genre":
+                            try {
+                                Genre genre = checkGenre();
+                                selectedBook.setGenre(genre);
+                            } catch (ClassCastException e){
+                                System.out.println("You enter not correct genre");
+                            }
+                            break;
+                        case "type":
+                            try {
+                                Type type = checkType();
+                                selectedBook.setType(type);
+                            }
+                            catch (ClassCastException e){
+                                System.out.println("You enter not correct genre");
+                            }
+                            break;
+                        case "description":
+                            SenderEmail sender = new SenderEmail();
+                            System.out.println("Enter new description:");
+                            String description = scanner.nextLine().trim();
+                            selectedBook.setDescription(description);
+                            //Если меняется описание, отправить всем пользователям сообщение
+                            sender.sendEmail("The description of the book was modify", "Hi, it is a ebook bot. In our library was modify description of the book " + selectedBook.getName());
+                            break;
+                        case "storage":
+                            System.out.println("Enter new storage:");
+                            String storage = scanner.nextLine().trim();
+                            selectedBook.setStorage(storage);
+                            break;
+                        case "exit":
+                            return -1;
+                        default:
+                            System.out.println("You enter not correct word");
+                    }
+                }
+            } else if (text.contains("add")) {
+                baseOfBook.addNewBook(selectedBook);
+                arrayListOfBook.remove(selectedBook);
+            }
+        } else System.out.println("You enter not correct val");
+        return currentPage;
+    }
+
+    //Метод, который вызывается из под администратора
+     void modify(){
+        BaseOfBook baseOfBook = new BaseOfBook();
+        SenderEmail sender = new SenderEmail();
+        while (true) {
+            System.out.println("What want you do? Press '1', if you wand add new book, '2' if you want delete book, '3' if you want modify information about book, '4' if you wand check books from email, '0' to exit");
+            Scanner scanner = new Scanner(System.in);
+            String ch = scanner.nextLine();
+            switch (ch){
+                case "1":
+                    try {
+                        //String name, String author, Genre genre, Type type, String description, String storage
+                        System.out.println("Enter name of the book");
+                        String name = scanner.nextLine();
+                        System.out.println("Enter author");
+                        String author = scanner.nextLine();
+
+                        Genre genre = checkGenre();
+
+                        Type type = checkType();
+
+                        System.out.println("Enter description of the book");
+                        String description = scanner.nextLine();
+                        System.out.println("Enter storage");
+                        String storage = scanner.nextLine();
+                        baseOfBook.addNewBook(name, author, genre, type, description, storage);
+                        sender.sendEmail("New book was added", "Hi, it is a ebook bot. In our library was added new book " + name + " by the author " + name);
+                    } catch (IllegalArgumentException e){
+                        System.out.println("Incorrect input value");
+                    }
+                    break;
+                case "2":
+                    pageControl(BooksText.DEL.toString());
+                    break;
+                case "3":
+                    pageControl(BooksText.MOD.toString());
+                    break;
+                case "4":
+                    List booksFromEmail = baseOfBook.listOfBookFromEmail();
+                    pageControl(BooksText.ADD.toString(), booksFromEmail);
+                    break;
+                case "0":
+                    return;
+                default:
+                    System.out.println("You enter not correct val.");
+            }
+            baseOfBook.saveInFile();
+        }
+    }
+
+    //Метод, который отвечает за переходы по страницам
+    private void pageControl(String text, List... lists){
+        int currentPage = 1;
+        while (currentPage != -1) {
+            if(lists.length == 0) {
+                currentPage = showBooks(text, currentPage);
+            }
+            else currentPage = showBooks(text, currentPage, lists[0]);
+        }
+    }
+
+    //Выводит список возможных жанров, и принимает один из них
+    private Genre checkGenre(){
+        Genre genre = null;
+        boolean correct = false;
+        while (!correct) {
+            try {
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("Check genre");
+                for (Genre g : Genre.values()) {
+                    System.out.print(g + ", ");
+                }
+                System.out.println();
+                genre = Genre.valueOf(scanner.nextLine().trim().toUpperCase());
+                correct = true;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Incorrect input value");
+            }
+        }
+        return genre;
+    }
+
+    //Выводит список возможных типов книг, и принимает один из них
+    private Type checkType(){
+        Type type = null;
+        boolean correct = false;
+        while (!correct) {
+            try {
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("Check type");
+                for (Type t : Type.values()) {
+                    System.out.print(t + ", ");
+                }
+                System.out.println();
+                type = Type.valueOf(scanner.nextLine().trim().toUpperCase());
+                correct = true;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Incorrect input value");
+            }
+        }
+        return type;
+    }
+
+}
