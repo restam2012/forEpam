@@ -35,20 +35,20 @@ public class Main {
                     den.deleteTreasures(scanner.nextLine());
                     break;
                 case 3:
-                    den.showTreasure();
+                    System.out.println(den.showTreasure());
                     break;
                 case 4:
-                    den.showMaxPrice();
+                    System.out.println(den.showMaxPrice());
                     break;
                 case 5:
                     System.out.println("Enter price:");
-                    den.showTreasureByPrice(Double.valueOf(scanner.nextLine()));
+                    System.out.println(den.showTreasureByPrice(Double.valueOf(scanner.nextLine())));
                     break;
                 case 6:
-                    den.saveTreasure();
+                    System.out.println(den.saveTreasure());
                     break;
                 case 7:
-                    den.getFromFile();
+                    System.out.println(den.getFromFile());
                     break;
                 case 0:
                     System.out.println("Bye!");
