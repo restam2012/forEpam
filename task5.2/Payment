@@ -1,0 +1,115 @@
+import java.util.List;
+import java.util.Objects;
+
+public class Payment {
+
+    public Payment() {
+    }
+
+    //Класс, представляющий собой покупку
+    private class Goods {
+        private String name;
+        private double price;
+
+        public Goods(){
+
+        }
+
+        public Goods(String name, double price) {
+            this.name = name;
+            this.price = price;
+        }
+
+        public double getPrice() {
+            return price;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public String toString() {
+            return name + " cost " + price + " dollars.";
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public void setPrice(double price) {
+            this.price = price;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Goods goods = (Goods) o;
+            return Double.compare(goods.price, price) == 0 && Objects.equals(name, goods.name);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(name, price);
+        }
+    }
+
+
+    public String addGoods(Account account, String name, double price){
+        String message = "";
+        Goods g = new Goods(name, price);
+        account.setCost(account.getCost() + price);
+        account.addGoods(g);
+        if (account.getCost() <= account.getBalance()) {
+            message += (name + " added successfully");
+        } else {
+            message += (name + " added, but you have exceeded the limit by " + (account.getCost() - account.getBalance()) + " dollars.");
+        }
+        return message;
+    }
+
+    //Вывести строковый список покупок из корзины
+    public String showListOfGoods(Account account){
+        String listOfGoods = new String();
+        List goods = account.getGoods();
+        int i = 1;
+        for(Object g:goods){
+            listOfGoods += i++ + "\t" + g.toString() + "\n";
+        }
+        return listOfGoods;
+    }
+
+    //Вернуть одну конкретную покупку из списка
+    public Object returnGoods(Account account, int num){
+        List goods = account.getGoods();
+        return goods.get(num);
+    }
+
+    //Вывести баланс и сумма покупок из корзины
+    public String showBalance(Account account){
+        String balance = new String();
+        balance += "Your balance is " + account.getBalance() + "\n";
+        balance += "Cost of your goods is " + account.getCost();
+        return balance;
+    }
+
+    public void addBill(Account account, double money){
+       account.setBalance(account.getBalance() + money);
+    }
+
+    public String buy(Account account) {
+        String message = new String();
+        if (account.getBalance() >= account.getCost()) {
+            message += "Your purchase was successful. Your rest is " + (account.getBalance() - account.getCost()) + " dollars";
+        } else {
+            message += "You can't bought this all. You have exceeded tht limit by " + (account.getCost() - account.getBalance()) + " dollars.";
+        }
+        return message;
+    }
+
+    public void deleteGoods(Account account, Object good){
+        List goods = account.getGoods();
+        goods.remove(good);
+    }
+}
