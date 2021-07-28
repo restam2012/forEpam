@@ -1,6 +1,9 @@
 package by.epam.lesson5.task4;
 
-public class Treasure {
+import java.io.Serializable;
+import java.util.Objects;
+
+public class Treasure implements Serializable {
     private String name;
     private double price;
     private double weight;
@@ -8,6 +11,21 @@ public class Treasure {
     public Treasure(String name, double price, double weight) {
         this.name = name;
         this.price = price;
+        this.weight = weight;
+    }
+
+    public Treasure() {
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
@@ -28,4 +46,16 @@ public class Treasure {
         return weight;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Treasure treasure = (Treasure) o;
+        return Double.compare(treasure.price, price) == 0 && Double.compare(treasure.weight, weight) == 0 && Objects.equals(name, treasure.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, price, weight);
+    }
 }
