@@ -1,0 +1,14 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Create new account. Enter name:");
+        String name = scanner.nextLine();
+        System.out.println("Enter first balance");
+        double balance = Double.valueOf(scanner.nextLine().trim().replace(",", "."));
+        Order order = new Order();
+        order.createAccount(balance, name);
+        order.getOrder();
+    }
+}
