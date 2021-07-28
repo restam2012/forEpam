@@ -1,0 +1,64 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Order {
+
+    Scanner scanner = new Scanner(System.in);
+    Payment payment = new Payment();
+    Account account;
+
+    public void createAccount(double balance, String name){
+        account = new Account(balance, name);
+    }
+
+    public void getOrder(){
+        System.out.println("Welcome you to our store.");
+        while (true){
+            System.out.println("What want you do?");
+            System.out.println("1. Add new items to basket.");
+            System.out.println("2. Delete items from basket.");
+            System.out.println("3. View order in basket.");
+            System.out.println("4. View balance.");
+            System.out.println("5. Add money to bill");
+            System.out.println("6. Buy items from basket");
+            System.out.println("0. Exit");
+            System.out.println();
+            switch (scanner.nextLine().trim()){
+                case "1":
+                    System.out.println("Enter name of item");
+                    String name = scanner.nextLine();
+                    System.out.println("Enter price");
+                    double price = Double.valueOf(scanner.nextLine().trim().replace(",", "."));
+                    System.out.println(payment.addGoods(account, name, price));
+                    break;
+                case "2":
+                    System.out.println("Select item, which you want delete. Enter num of item");
+                    System.out.println(payment.showListOfGoods(account));
+                    int choice = Integer.valueOf(scanner.nextLine().trim()) - 1;
+                    System.out.println(choice);
+                    Object selectedGoods = payment.returnGoods(account, choice);
+                    payment.deleteGoods(account, selectedGoods);
+                    break;
+                case "3":
+                    System.out.println(payment.showListOfGoods(account));
+                    break;
+                case "4":
+                    System.out.println(payment.showBalance(account));
+                    break;
+                case "5":
+                    System.out.println("Enter money for added to bill.");
+                    double money = Double.valueOf(scanner.nextLine().trim().replace(",", "."));
+                    payment.addBill(account, money);
+                    break;
+                case "6":
+                    System.out.println(payment.buy(account));
+                    break;
+                case "0":
+                    return;
+                default:
+                    System.out.println("You enter not correct val");
+            }
+        }
+    }
+}
