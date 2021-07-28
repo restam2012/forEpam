@@ -20,13 +20,13 @@ public class Den {
 
     }
 
-//Добавить сокровище
+    //Добавить сокровище
     public void addTreasures(Treasure... treasure){
         for (Treasure p: treasure) {
             treasures.add(p);
         }
     }
-//Удалить сокровище
+    //Удалить сокровище
     public void deleteTreasures(String name){
         for (Treasure p: treasures) {
             if(p.getName().equals(name)){
@@ -34,19 +34,21 @@ public class Den {
             }
         }
     }
-//Показать все сокровища
-    public void showTreasure(){
+    //Показать все сокровища
+    public String showTreasure(){
+        String result = new String();
         sort();
         for (Treasure p: treasures) {
-            System.out.println(p);
+            result += p + "\n";
         }
+        return result;
     }
-//Показать самое дорогое сокровище, из сортированного списка выбрать самую первую запись(самое дорогое сокровище)
-    public void showMaxPrice(){
+    //Показать самое дорогое сокровище, из сортированного списка выбрать самую первую запись(самое дорогое сокровище)
+    public String showMaxPrice(){
         sort();
-        System.out.println(treasures.stream().findFirst().get());
+        return treasures.stream().findFirst().get().toString();
     }
-//Сортировка от самого дорого к самому дешевому
+    //Сортировка от самого дорого к самому дешевому
     private void sort(){
         Collections.sort(treasures, new Comparator<Treasure>() {
             @Override
@@ -57,36 +59,38 @@ public class Den {
             }
         });
     }
-//Показать сокровища, сумма равной указанной сумме
-    public void showTreasureByPrice(double price){
+    //Показать сокровища, сумма равной указанной сумме
+    public String showTreasureByPrice(double price){
+        String result = new String();
         sort();
         for (Treasure p: treasures) {
-            if(p.getPrice() == price) System.out.println(p);
+            if(p.getPrice() == price) result += p + "\n";
         }
+        return result;
     }
-//Сохранить список сокровищ в файл
-    public void saveTreasure(){
-        try (FileWriter writer = new FileWriter("file\\by.epam.lesson5.task3.Den.txt")){
+    //Сохранить список сокровищ в файл
+    public String saveTreasure(){
+        try (FileWriter writer = new FileWriter("by.epam.lesson5.task4.Den.txt")){
             for (Treasure p: treasures) {
                 writer.write(p.toString() + "\n");
             }
         } catch (IOException e){e.printStackTrace();}
-        System.out.println("by.epam.lesson5.task3.Treasure save successful");
+        return "by.epam.lesson5.task4.Treasure save successful";
     }
-//Взять список из файла
-    public void getFromFile(){
+    //Взять список из файла
+    public String getFromFile(){
         int count = 0;
-        try (FileReader reader = new FileReader("file\\by.epam.lesson5.task3.Den.txt")){
+        try (FileReader reader = new FileReader("by.epam.lesson5.task4.Den.txt")){
             Scanner scanner = new Scanner(reader);
             while (scanner.hasNext()){
                 treasures.add(treasureHelper(scanner.nextLine()));
                 count++;
             }
         } catch (IOException e){e.printStackTrace();}
-        System.out.println(count + " treasure added");
+        return count + " treasure added";
     }
 
-//Разбитие записи на нужные графы, которые потом упаковываются в класс by.epam.lesson5.task3.Treasure
+    //Разбитие записи на нужные графы, которые потом упаковываются в класс by.epam.lesson5.task3.by.epam.lesson5.task3.Treasure
     private Treasure treasureHelper(String line) throws IOException{
         if(line.isEmpty()) throw new IOException("Enter empty line");
         String[] mass = line.split("\t");
