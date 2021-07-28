@@ -1,0 +1,33 @@
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+public class Main {
+    public static void main(String[] args) {
+        MyCalendar myCalendar = new MyCalendar();
+        Calendar calendar = new GregorianCalendar();
+        Calendar calendar2 = new GregorianCalendar();
+        Calendar calendar3 = new GregorianCalendar();
+        Calendar calendar4 = new GregorianCalendar();
+        Calendar calendar5 = new GregorianCalendar();
+        Calendar calendar6 = new GregorianCalendar();
+        calendar.set(2021, 07, 03);
+        myCalendar.addDayOff(calendar, TypeOfDay.HOLIDAY, "Independent day");
+        calendar2.set(2021, 07, 04);
+        myCalendar.addDayOff(calendar2, TypeOfDay.DAY_OFF);
+
+        calendar4.set(2021, 07, 10);
+        myCalendar.addDayOff(calendar4, TypeOfDay.DAY_OFF);
+
+        calendar5.set(2021, 07, 11);
+        myCalendar.addDayOff(calendar5, TypeOfDay.DAY_OFF);
+
+        calendar6.set(2021, 06, 26);
+        myCalendar.addDayOff(calendar6, TypeOfDay.DAY_OFF);
+
+        calendar3.set(2021, 07, 05);
+
+        System.out.println(myCalendar.checkDay(calendar3));
+    }
+
+
+}
