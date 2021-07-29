@@ -1,18 +1,18 @@
 package by.epam.lesson5.task5;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Application {
     public static void main(String[] args) {
-        ArrayList<Present> arrayList = new ArrayList<>();
+        List<Present> arrayList = new ArrayList<>();
         try {
-            Present present = new Present("CHOCOLAT", "GIFT_BAG", 5);
+            Present present = new Present("CHOCOLATE", "GIFT_BAG", 5);
             arrayList.add(present);
+            System.out.println(present.getAction());
         } catch (IllegalArgumentException e){
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
-
-        System.out.println(arrayList.size());
 
         try {
             Present present = new Present("Candy", "GIFT_BAG", 5);
