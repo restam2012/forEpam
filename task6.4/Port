@@ -1,3 +1,5 @@
+package by.epam.lesson6.task3;
+
 public class Port{
     private int maxWeightRepository; //Вместимость склада
     private int maxWeightShip; //Грузоподьемность корабля
