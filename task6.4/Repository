@@ -1,4 +1,4 @@
-package by.epam.lesson6.task3;
+package by.epam.lesson6.task4;
 
 import java.io.Serializable;
 import java.util.Objects;
