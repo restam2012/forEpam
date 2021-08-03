@@ -1,0 +1,22 @@
+package by.epam.task4_2_1.main;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+	public static void main(String[] arg) {
+		Command command = new Command();
+		Sentence sentence = new Sentence("This program was developed for Java online course.");
+		Sentence sentence2 = new Sentence("I hope that you will be satisfied with my skills.");
+		Sentence head = new Sentence("My java program");
+		List text = new ArrayList<Sentence>();
+		text.add(sentence);
+		text.add(sentence2);
+		Text myText = new Text(text, head);
+		System.out.println(command.outText(myText));
+		command.addText(myText, "This is program after recoding.");
+		System.out.println(command.outText(myText));
+		System.out.println(command.outHead(myText));
+	}
+
+}
