@@ -1,9 +1,17 @@
-class Main {
+/*
+* 5. Дано натуральное число Т, которое представляет длительность прошедшего времени в секундах. Вывести
+данное значение длительности в часах, минутах и секундах в следующей форме:
+ННч ММмин SSc.
+*/
+
+package by.epam.lesson1;
+
+public class Main {
     public static void main(String[] args) {
-        int t = 5690;
+        int t = 303;
         int h = t / 3600;
         int m = (t - h * 3600) / 60;
-        int s = m % 60;
+        int s = (t - h * 3600) % 60;
         String result = "";
         result += forAddZero(h,"ч ");
         result += forAddZero(m, "мин ");
