@@ -1,67 +1,60 @@
-import java.util.ArrayList;
+package by.epam.task4_2_1.main;
 
-public class Text {
-    private ArrayList<Sentence> text;
-    private ArrayList<Word> head;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+public class Text implements Serializable {
+	//Текст состоит из предложений. Название состоит из одного предложения (одно слово ведь тоже является предложением)
+    private List text;
+    private Sentence head;
 
     public Text(){
         text = new ArrayList<>();
-        head = new ArrayList<>();
+        head = new Sentence();
     }
 
-    public Text(ArrayList<Sentence> sentences, ArrayList<Word> words){
+    public Text(List sentences, Sentence head){
         text = sentences;
-        head = words;
+        this.head = head;
     }
 
-    public void addText(Sentence sentence){
-        text.add(sentence);
+    public void setText(List text){
+        this.text = text;
+    }
+    
+    public List getText() {
+    	return text;
+    }
+    
+    public void setHead(Sentence head) {
+    	this.head = head;
+    }
+    
+    public Sentence getHead() {
+    	return head;
     }
 
-    public void addText(String newText){
-        for(String s:newText.split("(?<=\\.|\\?|!)")){
-            text.add(new Sentence(s.trim()));
-        }
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(head, text);
+	}
 
-    public void addText(ArrayList<Sentence> newSentences){
-        for(Sentence sentence:newSentences) {
-            text.add(sentence);
-        }
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Text other = (Text) obj;
+		return Objects.equals(head, other.head) && Objects.equals(text, other.text);
+	}
 
-    public void addHead(Word word){
-        head.add(word);
-    }
-
-    public void addHead(String newHead){
-        for(String s:newHead.split(" ")){
-            head.add(new Word(s));
-        }
-    }
-
-    public void addHead(ArrayList<Word> newHead){
-        for(Word word:newHead) {
-            head.add(word);
-        }
-    }
-
-    public void outText(){
-        System.out.println(doText(text));
-    }
-
-    public void outHead(){
-        for(Word w:head) {
-            System.out.print(w.toString() + " ");
-        }
-        System.out.println();
-    }
-
-    private StringBuilder doText (ArrayList<Sentence> text) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Sentence s:text) {
-            stringBuilder.append(s);
-        }
-        return stringBuilder;
-    }
+	@Override
+	public String toString() {
+		return "Text [text=" + text + ", head=" + head + "]";
+	}
 }
