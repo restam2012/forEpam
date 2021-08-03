@@ -1,11 +1,46 @@
-public class Word {
-    String word;
+package by.epam.task4_2_1.main;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+public class Word implements Serializable {
+    private String word;
+    
     public Word(String word){
         this.word = word;
+    }
+    
+    public Word() {
+    	
+    }
+    
+    public void setWord(String word) {
+    	this.word = word;
+    }
+    
+    public String getWord() {
+    	return word;
     }
 
     @Override
     public String toString() {
         return word;
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(word);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Word other = (Word) obj;
+		return Objects.equals(word, other.word);
+	}
 }
