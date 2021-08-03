@@ -1,0 +1,43 @@
+package by.epam.task4_2_1.main;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Command {
+	
+	public void addText(Text text, Sentence sentence) {
+    	List newText = text.getText();
+    	newText.add(sentence);
+        text.setText(newText);
+    }
+	
+	public void addText(Text text, String newText){
+        for(String s:newText.split("(?<=\\.|\\?|!)")){
+        	Sentence sentence = new Sentence(s.trim());
+            addText(text, sentence);
+        }
+    }
+
+    public void addText(Text text, ArrayList<Sentence> newSentences){
+        for(Sentence sentence:newSentences) {
+            addText(text, sentence);
+        }
+    }
+	
+	public String outText(Text text){
+        return new String(doText(text.getText()));
+    }
+
+    public String outHead(Text text){
+    	return text.getHead().toString();
+    }
+    
+	 private StringBuilder doText (List<Sentence> text) {
+	        StringBuilder stringBuilder = new StringBuilder();
+	        for (Sentence s:text) {
+	            stringBuilder.append(s);
+	        }
+	        return stringBuilder;
+	    }
+
+}
