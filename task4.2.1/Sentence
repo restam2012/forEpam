@@ -1,9 +1,14 @@
+package by.epam.task4_2_1.main;
+
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-public class Sentence {
-    public ArrayList<Word> sentences;
+public class Sentence implements Serializable{
+    private List<Word> sentences;
 
-    public Sentence(ArrayList<Word> sentences){
+    public Sentence(List sentences){
         this.sentences = sentences;
     }
     public Sentence(){
@@ -15,14 +20,38 @@ public class Sentence {
             sentences.add(new Word(str));
         }
     }
+    
+    public void setSentences(List sentences) {
+    	this.sentences = sentences;
+    }
 
+    public List getSentence() {
+    	return sentences;
+    }
+    
     public String toString(){
         String str = new String();
         for(Word w:sentences){
-            str += w.toString() + " ";
+            str += w.getWord() + " ";
         }
         return str;
     }
-
+    
+	@Override
+	public int hashCode() {
+		return Objects.hash(sentences);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Sentence other = (Sentence) obj;
+		return Objects.equals(sentences, other.sentences);
+	}
 
 }
