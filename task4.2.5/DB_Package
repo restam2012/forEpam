@@ -1,9 +1,12 @@
+package by.epam.task4.lesson2_5;
+
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 
 public class DB_Package {
-    private ArrayList<TourPackage> tourPackages;
+    private List<TourPackage> tourPackages;
 
     public DB_Package() {
         tourPackages = new ArrayList<>();
@@ -33,52 +36,53 @@ public class DB_Package {
         double lessPrice = -1;
         double morePrice = -1;
 
-        ArrayList<TourPackage> clonePackage = new ArrayList<>();
+        List<TourPackage> clonePackage = new ArrayList<>();
         for(TourPackage t:tourPackages){
             clonePackage.add(t);
         }
+        System.out.print("Let's setting filter. "); /*Здесь можно установить фильтр. Можно задать несколько. Для выхода из режима фильтров ввести exit*/
         while (!stop){
-            System.out.println("Let's setting filter. Enter criteria you need to travel.");
+            System.out.println("Enter criteria you need to travel.");
             System.out.println("Type");
             System.out.println("Transport");
             System.out.println("Eat");
             System.out.println("Days");
             System.out.println("Price");
-            System.out.println("End");
-            String selected = scanner.nextLine().trim();
+            System.out.println("Exit");
+            String selected = scanner.nextLine().trim().toLowerCase();
 
             switch (selected){
-                case "Type":
+                case "type":
                     System.out.println("Check type from the list:");
                     for(Type t:Type.values()){
                         System.out.println(t);
                     }
                     type = Type.valueOf(scanner.nextLine().trim());
                     break;
-                case "Transport":
+                case "transport":
                     System.out.println("Check transport from the list:");
                     for(Transport t:Transport.values()){
                         System.out.println(t);
                     }
                     transport = Transport.valueOf(scanner.nextLine().trim());
                     break;
-                case "Eat":
+                case "eat":
                     System.out.println("How many meals a day will the package consist. Enter the num from 0 to 3 (no less)");
                     eat = Integer.parseInt(scanner.nextLine());
                     break;
-                case "Days":
+                case "days":
                     System.out.println("Enter, how many days you want travel. Enter two value - no less and no more");
                     lessDay = scanner.nextInt();
                     moreDay = scanner.nextInt();
                     scanner.nextLine();
                     break;
-                case "Price":
+                case "price":
                     System.out.println("Enter, how mach money you can spend. Enter two double value - no less and no more");
                     lessPrice = scanner.nextDouble();
                     morePrice = scanner.nextDouble();
                     scanner.nextLine();
                     break;
-                case "End":
+                case "exit":
                     stop = true;
                     break;
                 default:
@@ -87,7 +91,7 @@ public class DB_Package {
         }
 
         for(TourPackage t:tourPackages){
-            if(type != null && !t.isHas(type)){
+            if(type != null && !isHas(type, t)){
                 clonePackage.remove(t);
             }
             if(transport != null && !t.getTransport().equals(transport)){
@@ -129,9 +133,16 @@ public class DB_Package {
     }
 
 
-    public void showTour(ArrayList<TourPackage> tourPackages){
+    private void showTour(List<TourPackage> tourPackages){
         for(TourPackage tourPackage:tourPackages){
             System.out.println(tourPackage.toString());
         }
+    }
+    
+    private boolean isHas(Type type, TourPackage t){
+        for(Type t1:t.getType()){
+            if(t1.equals(type)) return true;
+        }
+        return false;
     }
 }
