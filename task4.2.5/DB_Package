@@ -108,6 +108,15 @@ public class DB_Package {
             }
         }
         showTour(clonePackage);
+        System.out.println("Choose a package from the list. Enter his number. If you aren't satisfied, enter 0.");
+        while(!scanner.hasNextInt()) {
+        	System.out.println("You mast enter number.");
+        }
+        int x = scanner.nextInt();
+        if(x == 0) System.out.println("What a pity");
+        try {
+        	System.out.println("You choosen : " + clonePackage.get(x));
+        } catch(Exception e) {System.out.println("This tour is not exist.");}
     }
 
     public void sortByPrice(){
@@ -134,8 +143,9 @@ public class DB_Package {
 
 
     private void showTour(List<TourPackage> tourPackages){
+    	int i = 1;
         for(TourPackage tourPackage:tourPackages){
-            System.out.println(tourPackage.toString());
+            System.out.println(i++ + " " + tourPackage.toString());
         }
     }
     
