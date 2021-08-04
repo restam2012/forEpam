@@ -1,16 +1,14 @@
-import java.util.ArrayList;
+package by.epam.task4.lesson2_5;
 
-public class Main  {
-
-    public static void main( String args[] ) {
-        DB_Package db_package = new DB_Package();
-        db_package.addPackage("Travet to London", Transport.PLAIN, 0, 2, 1000, Type.REST, Type.SHOPPING);
+public class Main {
+	public static void main(String args[]) {
+		DB_Package db_package = new DB_Package();
+        db_package.addPackage("Travel to London", Transport.PLAIN, 0, 2, 1000, Type.REST, Type.SHOPPING);
         db_package.addPackage("Naroch", Transport.CAR, 3, 1, 100, Type.CURE);
         db_package.addPackage("Warshava", Transport.TRAIN, 1, 5, 800, Type.CURE, Type.SHOPPING);
         db_package.showPackage();
         db_package.sortByPrice();
         db_package.showPackage();
+	}
 
-    }
 }
-
