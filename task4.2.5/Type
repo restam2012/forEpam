@@ -1,3 +1,5 @@
+package by.epam.task4.lesson2_5;
+
 public enum  Type {
     REST, EXCURSION, CURE, SHOPPING, CRUISE
 }
