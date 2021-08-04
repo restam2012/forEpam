@@ -1,8 +1,13 @@
-import java.util.ArrayList;
+package by.epam.task4.lesson2_5;
 
-public class TourPackage {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+public class TourPackage implements Serializable{
     private String name;
-    private ArrayList<Type> type;
+    private List<Type> type;
     private Transport transport;
     private int countEat;
     private int day;
@@ -19,6 +24,10 @@ public class TourPackage {
             type.add(t);
         }
     }
+    
+    public TourPackage() {
+    	
+    }
 
     public String getName() {
         return name;
@@ -28,23 +37,12 @@ public class TourPackage {
         this.name = name;
     }
 
-    public ArrayList<Type> getType() {
+    public List<Type> getType() {
         return type;
     }
 
-    public void addType(Type t){
-        type.add(t);
-    }
-
-    public void setType(ArrayList<Type> type) {
+    public void setType(List<Type> type) {
         this.type = type;
-    }
-
-    public boolean isHas(Type t){
-        for(Type t1:type){
-            if(t1.equals(t)) return true;
-        }
-        return false;
     }
 
     public Transport getTransport() {
@@ -84,4 +82,25 @@ public class TourPackage {
         return "Tour package " + name + ", type is " + type + ", by " + transport +
                 " with " + countEat + " times of eat, for " + day + " days. Cost " + prise + " dollars.";
     }
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(countEat, day, name, prise, transport, type);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TourPackage other = (TourPackage) obj;
+		return countEat == other.countEat && day == other.day && Objects.equals(name, other.name)
+				&& Double.doubleToLongBits(prise) == Double.doubleToLongBits(other.prise)
+				&& transport == other.transport && Objects.equals(type, other.type);
+	}
+    
+    
 }
