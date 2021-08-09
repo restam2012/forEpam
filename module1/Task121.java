@@ -41,6 +41,7 @@ public class Task121 {
 
 		System.out.printf("Enter %s angle. \n", message);
 		while (!scanner.hasNextDouble()) {
+			scanner.next();
 			System.out.println("You enter not double. Try again.");
 			System.out.printf("Enter %s angle. \n", message);
 		}
