@@ -15,6 +15,11 @@ public class Task121 {
 		y = waitingDouble("second");
 
 		boolean isTriangle = false;
+		
+		if(x <= 0 || y <= 0) {
+			System.out.println("You enter impossible angle");
+			return;
+		}
 
 		if (x + y < 180) {
 			isTriangle = true;
