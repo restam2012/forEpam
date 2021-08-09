@@ -4,7 +4,7 @@
 ННч ММмин SSc.
 */
 
-package by.epam.lesson1;
+package by.epam.lesson1.main;
 
 public class Task115 {
     public static void main(String[] args) {
