@@ -1,7 +1,7 @@
 /*
 * 1. Найдите значение функции: z = ( (a – 3 ) * b / 2) + c
 */
-package by.epam.lesson1;
+package by.epam.lesson1.main;
 
 public class Task111 {
     public static void main(String[] args) {
