@@ -3,7 +3,7 @@
 дробную и целую части числа и вывести полученное значение числа.
 */
 
-package by.epam.lesson1;
+package by.epam.lesson1.main;
 
 public class Task114 {
     public static void main(String[] args) {
