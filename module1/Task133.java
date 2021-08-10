@@ -1,5 +1,5 @@
 /*
-* 3. Найти сумму квадратов первых ста чисел.
+* 3. РќР°Р№С‚Рё СЃСѓРјРјСѓ РєРІР°РґСЂР°С‚РѕРІ РїРµСЂРІС‹С… СЃС‚Р° С‡РёСЃРµР».
 */
 package by.epam.lesson1.cycle;
 
@@ -11,7 +11,7 @@ public class Task133 {
         for(int i = 1; i <= val; i++){
             result += i * i;
             
-            if(result < 0) { //Выход, если привышен размер инта.
+            if(result < 0) { //Р’С‹С…РѕРґ, РµСЃР»Рё РїСЂРёРІС‹С€РµРЅ СЂР°Р·РјРµСЂ РёРЅС‚Р°.
             	System.out.printf("You have got used to the int size in %d cycle.", i);
             	return;
             }
