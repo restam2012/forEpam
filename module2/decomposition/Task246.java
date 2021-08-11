@@ -1,16 +1,16 @@
 /*
- * 6. Написать метод(методы), проверяющий, являются ли данные три числа взаимно простыми.*/
+ * 6. РќР°РїРёСЃР°С‚СЊ РјРµС‚РѕРґ(РјРµС‚РѕРґС‹), РїСЂРѕРІРµСЂСЏСЋС‰РёР№, СЏРІР»СЏСЋС‚СЃСЏ Р»Рё РґР°РЅРЅС‹Рµ С‚СЂРё С‡РёСЃР»Р° РІР·Р°РёРјРЅРѕ РїСЂРѕСЃС‚С‹РјРё.*/
 
 package by.epam.lesson2.decomposition;
 
 public class Task246 {
     public static void main(String[] args) {
         int[] mass = {10, 2, 3};
-        boolean ifSimple = true; //Числа по умолчанию простые.
+        boolean ifSimple = true; //Р§РёСЃР»Р° РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РїСЂРѕСЃС‚С‹Рµ.
         
         for (int i = 0; i < mass.length - 1; i++) {
             for (int j = i + 1; j < mass.length; j++) {
-                ifSimple = findNOD(mass[i], mass[j]) == 1 ? ifSimple : false; //Если не простые, то false и для будущего расчета
+                ifSimple = findNOD(mass[i], mass[j]) == 1 ? ifSimple : false; //Р•СЃР»Рё РЅРµ РїСЂРѕСЃС‚С‹Рµ, С‚Рѕ false Рё РґР»СЏ Р±СѓРґСѓС‰РµРіРѕ СЂР°СЃС‡РµС‚Р°
             }
         }
         
