@@ -1,6 +1,6 @@
 /*
-* 5. Вычислить значение функции:
-*/
+ * 5. Р’С‹С‡РёСЃР»РёС‚СЊ Р·РЅР°С‡РµРЅРёРµ С„СѓРЅРєС†РёРё:
+ */
 
 package by.epam.module1.branching;
 
@@ -14,7 +14,7 @@ public class Task125 {
             result = x * x - 3 * x + 9;
         }
         else {
-            result = 1 / (Math.pow(x, 3.0) + 6); //Math.pow() возвращает double
+            result = 1 / (Math.pow(x, 3.0) + 6); //Math.pow() РёРјРµРµС‚ С‚РёРї double
         }
         System.out.println(result);
     }
