@@ -1,5 +1,5 @@
 /*
-* 2. Найти max{min(a, b), min(c, d)}
+* 2. РќР°Р№С‚Рё max{min(a, b), min(c, d)}
 */
 package by.epam.module1.branching;
 
