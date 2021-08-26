@@ -1,8 +1,8 @@
 package by.epam.module2.sort;
 
 /*
- * 2. Даны две последовательности a1 <= a2 <= ... <= an и b1 <= b2 <= ... <= bm. Образовать из них новую
- *  последовательностьчисел так, чтобы она тоже была неубывающей. Примечание. Дополнительный массив не использовать.
+ * 2. Р”Р°РЅС‹ РґРІРµ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё a1 <= a2 <=...<= an Рё b1 <= b2 <=...<= bm. РћР±СЂР°Р·РѕРІР°С‚СЊ РёР· РЅРёС… РЅРѕРІСѓСЋ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚СЊ
+ * С‡РёСЃРµР» С‚Р°Рє, С‡С‚РѕР±С‹ РѕРЅР° С‚РѕР¶Рµ Р±С‹Р»Р° РЅРµСѓР±С‹РІР°СЋС‰РµР№. РџСЂРёРјРµС‡Р°РЅРёРµ. Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Р№ РјР°СЃСЃРёРІ РЅРµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ.
  * */
 
 import java.util.Arrays;
@@ -12,6 +12,12 @@ public class Task232 {
     public static void main(String[] args) {
         int[] mass1 = {0, 1, 2, 3, 4, 5, 100};
         int[] mass2 = {20, 30, 40, 50, 60, 70, 80};
+        
+        if (!isMatrixCorrect(mass1, mass2)) {
+			System.out.println("Matrices is not exist or correct");
+			return;
+		}
+        
         int [] resultMass = new int[mass1.length + mass2.length];
         
         int countMass1 = 0;
@@ -33,4 +39,32 @@ public class Task232 {
         
         System.out.println(Arrays.toString(resultMass));
     }
+    
+    private static boolean isMatrixCorrect(int[] mass1, int[] mass2) {
+
+		if (mass1 == null || mass2 == null || mass1.length == 0 || mass2.length == 0) {
+
+			return false;
+		}
+
+		if (mass1.length != mass2.length) {
+
+			return false;
+		}
+		
+		for (int i = 1; i < mass1.length; i += 2) {
+			if (mass1[i - 1] > mass1[i]) {
+				return false; 
+			}
+		}
+		
+		for (int i = 1; i < mass2.length; i += 2) {
+			if (mass2[i - 1] > mass2[i]) {
+				return false; 
+			}
+		}
+
+		return true;
+	}
+
 }

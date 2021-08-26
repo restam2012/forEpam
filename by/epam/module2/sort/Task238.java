@@ -15,8 +15,9 @@ public class Task238 {
 		int[] mass1 = {0, 1, 2};
 		int[] mass2 = {20, 4, 8};
 
-		if (isMatrixCorrect(mass1, mass2)) {
+		if (!isMatrixCorrect(mass1, mass2)) {
 			System.out.println("Matrices is not exist or correct");
+			return;
 		}
 
 		double denuminator;
