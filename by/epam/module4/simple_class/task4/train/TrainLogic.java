@@ -56,7 +56,7 @@ public class TrainLogic {
 	public Train[] sortByDestinationAndTime(Train[] train) {		
 		train = sortByDestination(train);
 		
-		sortByTimeAfterDestination(train);
+		train = sortByTimeAfterDestination(train);
 
 		return train;
 	}
