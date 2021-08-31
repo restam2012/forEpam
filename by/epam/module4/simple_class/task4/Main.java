@@ -36,7 +36,7 @@ public class Main {
 		
 		Train[] selectedTrain;
 		
-		selectedTrain = logic.getSelectedNumOfTrain(trains);
+		selectedTrain = logic.getSelectedNumOfTrain(trains, view.waitInt());
 		view.printFullInfoAboutMassOfTrian(selectedTrain);
 	}
 }

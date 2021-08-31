@@ -33,13 +33,11 @@ public class TrainLogic {
 		return train;
 	}
 
-	public Train[] getSelectedNumOfTrain(Train[] train) {
-		int num;
-		TrainInputOutput view = new TrainInputOutput();
+	public Train[] getSelectedNumOfTrain(Train[] train, int num) {
+		
 		List<Train> listOfTrain = new ArrayList<Train>();
 		Train[] massOfTrain;
 
-		num = view.waitInt();
 		for (Train t : train) {
 			if (t.getTrainNum() == num) {
 				listOfTrain.add(t);
